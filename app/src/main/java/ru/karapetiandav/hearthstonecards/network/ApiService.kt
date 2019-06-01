@@ -32,4 +32,6 @@ class ApiService {
             .addInterceptor(loggingInterceptor)
             .build()
     }
+
+    fun getCardsApi(): CardsApi = retrofit.create(CardsApi::class.java)
 }
