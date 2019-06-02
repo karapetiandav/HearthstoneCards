@@ -7,6 +7,7 @@ import ru.karapetiandav.hearthstonecards.features.shared.CardsRepository
 import ru.karapetiandav.hearthstonecards.features.shared.CardsRepositoryImpl
 import ru.karapetiandav.hearthstonecards.main.viewmodel.MainViewModel
 import ru.karapetiandav.hearthstonecards.network.ApiService
+import ru.karapetiandav.hearthstonecards.services.ConnectivityService
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
@@ -16,7 +17,8 @@ object Modules {
         single { Cicerone.create() }
         single<Router> { get<Cicerone<Router>>().router }
         single<NavigatorHolder> { get<Cicerone<Router>>().navigatorHolder }
-        single { ApiService() }
+        single { ApiService(get(), get()) }
+        single { ConnectivityService(get()) }
     }
 
     val mainModule = module {
