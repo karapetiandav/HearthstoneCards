@@ -6,7 +6,7 @@ import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsViewMode
 import ru.karapetiandav.hearthstonecards.features.shared.CardsRepository
 import ru.karapetiandav.hearthstonecards.features.shared.CardsRepositoryImpl
 import ru.karapetiandav.hearthstonecards.main.viewmodel.MainViewModel
-import ru.karapetiandav.hearthstonecards.network.ApiService
+import ru.karapetiandav.hearthstonecards.services.ApiService
 import ru.karapetiandav.hearthstonecards.services.ConnectivityService
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.NavigatorHolder
