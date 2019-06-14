@@ -2,6 +2,7 @@ package ru.karapetiandav.hearthstonecards.di.modules
 
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsDetailViewModel
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsViewModel
 import ru.karapetiandav.hearthstonecards.features.shared.CardsRepository
 import ru.karapetiandav.hearthstonecards.features.shared.CardsRepositoryImpl
@@ -27,6 +28,7 @@ object Modules {
 
     val cardsModule = module {
         single<CardsRepository> { CardsRepositoryImpl(get()) }
-        viewModel { CardsViewModel(get()) }
+        viewModel { CardsViewModel(get(), get()) }
+        viewModel { CardsDetailViewModel(get()) }
     }
 }

@@ -3,7 +3,6 @@ package ru.karapetiandav.hearthstonecards.features.cards.ui
 
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -39,8 +38,6 @@ class CardsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-
         screenState = LoadingStateDelegate(cards_list, loading)
 
         observe(cardsViewModel.state, ::onStateChanged)
@@ -74,7 +71,9 @@ class CardsFragment : Fragment() {
     private fun populateList(cardsWithCategories: Map<String, List<Card>>) {
         cards_list.layoutManager = LinearLayoutManager(context)
         val allCards = cardsWithCategories.values.flatten()
-        cards_list.adapter = CardsAdapter(allCards)
+        cards_list.adapter = CardsAdapter(allCards) {
+            cardsViewModel.onCardClick(it)
+        }
     }
 
     private fun populateBottomSheet(types: List<String>) {
