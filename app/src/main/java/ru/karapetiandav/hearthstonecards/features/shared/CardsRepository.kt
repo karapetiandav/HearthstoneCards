@@ -8,5 +8,5 @@ interface CardsRepository {
     fun getCards(): Single<Map<String, List<Card>>>
     fun getSelectedCard(): Single<Card>
     fun setSelectedCard(card: Card)
-    fun getSingleCard(name: String): Single<List<DetailedCard>>
+    fun getSingleCard(name: String): Single<DetailedCard>
 }

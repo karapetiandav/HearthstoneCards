@@ -29,6 +29,6 @@ object Modules {
     val cardsModule = module {
         single<CardsRepository> { CardsRepositoryImpl(get()) }
         viewModel { CardsViewModel(get(), get()) }
-        viewModel { CardsDetailViewModel(get()) }
+        viewModel { CardsDetailViewModel(get(), get()) }
     }
 }

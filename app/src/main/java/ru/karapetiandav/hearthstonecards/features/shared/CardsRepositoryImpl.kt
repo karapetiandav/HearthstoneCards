@@ -22,8 +22,9 @@ class CardsRepositoryImpl(private val apiService: ApiService) : CardsRepository 
         return Single.just(card)
     }
 
-    override fun getSingleCard(name: String): Single<List<DetailedCard>> {
+    override fun getSingleCard(name: String): Single<DetailedCard> {
         return apiService.getCardsApi().getSingleCard(name)
+            .map { list -> list.first() }
             .subscribeOn(Schedulers.io())
     }
 }

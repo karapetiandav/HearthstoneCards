@@ -4,12 +4,14 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
+import ru.karapetiandav.hearthstonecards.CardsScreen
 import ru.karapetiandav.hearthstonecards.base.viewmodel.BaseViewModel
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.*
 import ru.karapetiandav.hearthstonecards.features.shared.CardsRepository
 import ru.karapetiandav.tinkoffintership.lifecycle.onNext
+import ru.terrakok.cicerone.Router
 
-class CardsDetailViewModel(cardsRepository: CardsRepository) : BaseViewModel() {
+class CardsDetailViewModel(cardsRepository: CardsRepository, private val router: Router) : BaseViewModel() {
 
     private val _state = MutableLiveData<CardDetailsScreenState>()
     val state: LiveData<CardDetailsScreenState>
@@ -28,15 +30,16 @@ class CardsDetailViewModel(cardsRepository: CardsRepository) : BaseViewModel() {
         cardsRepository.getSelectedCard()
             .toObservable()
             .flatMap { card -> cardsRepository.getSingleCard(card.name).toObservable() }
-            .map<CardDetailsScreenState> {
-                val card = it.first()
-                CardDetailsFullData(card)
-            }
+            .map<CardDetailsScreenState> { CardDetailsFullData(it) }
             .observeOn(AndroidSchedulers.mainThread())
             .onErrorReturn(::CardDetailsError)
             .startWith(CardDetailsLoading)
             .subscribe(_state::onNext) { th -> Log.e(this::class.java.simpleName, "ERROR", th) }
             .disposeOnViewModelDestroy()
+    }
+
+    fun onBackPressed() {
+        router.backTo(CardsScreen)
     }
 
 
