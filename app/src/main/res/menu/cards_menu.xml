@@ -3,13 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/cards_filter"
-        android:icon="@drawable/ic_filter_list_white_24dp"
-        android:title="@string/cards_menu_filter_title"
-        app:showAsAction="ifRoom" />
-
-    <item
+        android:id="@+id/cards_search"
         android:icon="@drawable/ic_search_white_24dp"
         android:title="@string/cards_menu_search_text"
-        app:showAsAction="ifRoom" />
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView" />
 </menu>

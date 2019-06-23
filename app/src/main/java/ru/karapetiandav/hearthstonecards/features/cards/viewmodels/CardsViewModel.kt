@@ -20,6 +20,7 @@ import ru.karapetiandav.hearthstonecards.features.shared.CardsRepository
 import ru.karapetiandav.tinkoffintership.lifecycle.EventsQueue
 import ru.karapetiandav.tinkoffintership.lifecycle.onNext
 import ru.terrakok.cicerone.Router
+import timber.log.Timber
 
 class CardsViewModel(private val cardsRepository: CardsRepository, private val router: Router) : BaseViewModel(),
     OnItemCheckListener {
@@ -99,7 +100,7 @@ class CardsViewModel(private val cardsRepository: CardsRepository, private val r
             .map { allCards ->
                 val findedCards = mutableMapOf<String, List<Card>>()
                 allCards.forEach { (key, value) ->
-                    findedCards[key] = value.filter { it.name.contains(text) }
+                    findedCards[key] = value.filter { it.name.toLowerCase().contains(text.toLowerCase()) }
                 }
                 findedCards
             }

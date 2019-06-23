@@ -9,7 +9,7 @@
     android:minHeight="340dp"
     app:behavior_hideable="true"
     app:behavior_peekHeight="0dp"
-    app:cardBackgroundColor="@color/primaryLightColor"
+    app:cardBackgroundColor="@color/secondaryLightColor"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
