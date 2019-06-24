@@ -7,11 +7,8 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import ru.karapetiandav.hearthstonecards.CardDetailsScreen
-import ru.karapetiandav.hearthstonecards.base.ShowFilterSheet
-import ru.karapetiandav.hearthstonecards.base.ShowToast
 import ru.karapetiandav.hearthstonecards.base.viewmodel.BaseViewModel
 import ru.karapetiandav.hearthstonecards.features.cards.models.Card
-import ru.karapetiandav.hearthstonecards.features.cards.ui.adapter.OnItemCheckListener
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsData
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsError
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsLoading
@@ -20,10 +17,8 @@ import ru.karapetiandav.hearthstonecards.features.shared.CardsRepository
 import ru.karapetiandav.tinkoffintership.lifecycle.EventsQueue
 import ru.karapetiandav.tinkoffintership.lifecycle.onNext
 import ru.terrakok.cicerone.Router
-import timber.log.Timber
 
-class CardsViewModel(private val cardsRepository: CardsRepository, private val router: Router) : BaseViewModel(),
-    OnItemCheckListener {
+class CardsViewModel(private val cardsRepository: CardsRepository, private val router: Router) : BaseViewModel() {
 
     private val _state = MutableLiveData<CardsViewState>()
     val state: LiveData<CardsViewState>
@@ -35,6 +30,15 @@ class CardsViewModel(private val cardsRepository: CardsRepository, private val r
 
     private var allCards: Map<String, List<Card>> = emptyMap()
 
+    var itemPosition = 0
+        set(value) {
+            if (value < 0) {
+                field = 0
+                return
+            }
+            field = value
+        }
+
     init {
         cardsRepository.getCards()
             .toObservable()
@@ -45,54 +49,11 @@ class CardsViewModel(private val cardsRepository: CardsRepository, private val r
                 allTypes = (cards.values.flatten().map { it.type }.toSet().toList())
                 currentSelectedTypes.addAll(allTypes)
             }
-            .map<CardsViewState> { cards -> CardsData(cards) }
+            .map<CardsViewState> { cards -> CardsData(cards.values.flatten()) }
             .startWith(CardsLoading)
             .onErrorReturn(::CardsError)
             .subscribe(_state::onNext) { th -> Log.e(CardsViewModel::class.java.simpleName, "ERROR", th) }
             .disposeOnViewModelDestroy()
-    }
-
-    override fun onItemCheck(item: String) {
-        val newCurrentSelectedTypes: MutableList<String> = currentSelectedTypes.toMutableList()
-        newCurrentSelectedTypes.add(item)
-        refreshList()
-    }
-
-    override fun onItemUncheck(item: String) {
-        if (currentSelectedTypes.size == 1) {
-            events.offer(ShowToast("Cannot select less than one type"))
-            return
-        }
-
-        currentSelectedTypes.remove(item)
-        refreshList()
-    }
-
-    private fun refreshList() {
-        Observable.just(allCards)
-            .map(::cardsWithSelectedTypes)
-            .subscribeOn(Schedulers.computation())
-            .observeOn(AndroidSchedulers.mainThread())
-            .map<CardsViewState> { cards -> CardsData(cards) }
-            .onErrorReturn(::CardsError)
-            .subscribe(_state::onNext)
-            .disposeOnViewModelDestroy()
-    }
-
-    private fun cardsWithSelectedTypes(allCards: Map<String, List<Card>>): Map<String, List<Card>> {
-        val filteredCards = mutableMapOf<String, List<Card>>()
-        val keys = allCards.keys
-        keys.forEach { key ->
-            val cards: List<Card> = allCards.getValue(key).filter { currentSelectedTypes.contains(it.type) }
-            filteredCards[key] = cards
-        }
-
-        return filteredCards
-    }
-
-    fun onFilterClicked(): Boolean {
-        events.offer(ShowFilterSheet(currentSelectedTypes))
-        return true
     }
 
     fun onSearchQuery(text: String) {
@@ -106,7 +67,7 @@ class CardsViewModel(private val cardsRepository: CardsRepository, private val r
             }
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
-            .map<CardsViewState> { cards -> CardsData(cards) }
+            .map<CardsViewState> { cards -> CardsData(cards.values.flatten()) }
             .onErrorReturn(::CardsError)
             .startWith(CardsLoading)
             .subscribe(_state::onNext)

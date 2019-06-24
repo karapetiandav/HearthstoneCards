@@ -17,13 +17,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        if (savedInstanceState == null) {
+            mainViewModel.onActivityCreate()
+        }
     }
 
     override fun onResumeFragments() {
         super.onResumeFragments()
         navigatorHolder.setNavigator(SupportAppNavigator(this, R.id.container))
-
-        mainViewModel.onActivityCreate()
     }
 
     override fun onPause() {

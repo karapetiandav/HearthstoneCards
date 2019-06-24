@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">HearthstoneCards</string>
+
+    <string name="cards_toolbar_title">All cards</string>
     <string name="cards_menu_search_text">Search</string>
     <string name="cards_bottom_sheet_type_text">Card type</string>
     <string name="cards_menu_filter_title">Filter</string>
