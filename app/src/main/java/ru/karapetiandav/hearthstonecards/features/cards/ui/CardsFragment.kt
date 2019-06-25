@@ -36,7 +36,7 @@ class CardsFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.fragment_cards, container, false)
+        return inflater.inflate(ru.karapetiandav.hearthstonecards.R.layout.fragment_cards, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,27 +77,40 @@ class CardsFragment : BaseFragment() {
         cards_list.scrollToPosition(cardsViewModel.itemPosition)
     }
 
+    private val MINIMAL_SEARCH_TEXT_LENGTH: Int = 3
+    private val SEARCH_DELAY: Long = 300
+
+    private lateinit var searchView: SearchView
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         activity?.menuInflater?.inflate(R.menu.cards_menu, menu)
+
         val searchManager = context?.getSystemService(SEARCH_SERVICE) as SearchManager
-        val searchView = menu?.findItem(R.id.cards_search)?.actionView as SearchView
+        val searchItem = menu?.findItem(R.id.cards_search)
+        searchView = searchItem?.actionView as SearchView
         searchView.setSearchableInfo(searchManager.getSearchableInfo(activity?.componentName))
 
         searchView
             .queryTextChangeEvents()
             .skipInitialValue()
-            .debounce(300, TimeUnit.MILLISECONDS)
+            .debounce(SEARCH_DELAY, TimeUnit.MILLISECONDS)
             .map { it.queryText.toString() }
-            .filter { it.isEmpty() || it.length >= 3 }
+            .filter { it.isEmpty() || it.length >= MINIMAL_SEARCH_TEXT_LENGTH }
             .distinctUntilChanged()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { cardsViewModel.onSearchQuery(it) }
             .disposeOnViewDestroy()
+
+
+        cardsViewModel.lastSearch?.let {
+            searchItem.expandActionView()
+            searchView.setQuery(it, true)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
         cardsViewModel.itemPosition = cardsListLayoutManager.findFirstVisibleItemPosition()
+        cardsViewModel.saveSearch(searchView.query.toString())
     }
 }

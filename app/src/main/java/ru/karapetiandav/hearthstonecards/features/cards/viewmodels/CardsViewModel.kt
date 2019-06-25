@@ -3,6 +3,7 @@ package ru.karapetiandav.hearthstonecards.features.cards.viewmodels
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.bumptech.glide.Glide.init
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -56,7 +57,12 @@ class CardsViewModel(private val cardsRepository: CardsRepository, private val r
             .disposeOnViewModelDestroy()
     }
 
+    var lastSearch: String? = null
+    private set
+
     fun onSearchQuery(text: String) {
+        lastSearch = text
+
         Observable.just(allCards)
             .map { allCards ->
                 val findedCards = mutableMapOf<String, List<Card>>()
@@ -77,5 +83,9 @@ class CardsViewModel(private val cardsRepository: CardsRepository, private val r
     fun onCardClick(card: Card) {
         cardsRepository.setSelectedCard(card)
         router.navigateTo(CardDetailsScreen)
+    }
+
+    fun saveSearch(query: String) {
+        lastSearch = query
     }
 }
