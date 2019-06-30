@@ -17,4 +17,6 @@ abstract class BaseViewModel : ViewModel() {
         compositeDisposable.add(this)
         return this
     }
+
+    fun ViewModel.TAG(): String = this::class.java.simpleName
 }

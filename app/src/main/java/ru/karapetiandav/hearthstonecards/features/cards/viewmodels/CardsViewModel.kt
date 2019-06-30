@@ -1,12 +1,8 @@
 package ru.karapetiandav.hearthstonecards.features.cards.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.bumptech.glide.Glide.init
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import ru.karapetiandav.hearthstonecards.CardDetailsScreen
 import ru.karapetiandav.hearthstonecards.base.viewmodel.BaseViewModel
 import ru.karapetiandav.hearthstonecards.features.cards.models.Card
@@ -15,11 +11,17 @@ import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsError
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsLoading
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsViewState
 import ru.karapetiandav.hearthstonecards.features.shared.CardsRepository
+import ru.karapetiandav.hearthstonecards.providers.rx.SchedulersProvider
 import ru.karapetiandav.tinkoffintership.lifecycle.EventsQueue
 import ru.karapetiandav.tinkoffintership.lifecycle.onNext
 import ru.terrakok.cicerone.Router
+import timber.log.Timber
 
-class CardsViewModel(private val cardsRepository: CardsRepository, private val router: Router) : BaseViewModel() {
+class CardsViewModel(
+    private val cardsRepository: CardsRepository,
+    private val router: Router,
+    private val schedulers: SchedulersProvider
+) : BaseViewModel() {
 
     private val _state = MutableLiveData<CardsViewState>()
     val state: LiveData<CardsViewState>
@@ -40,11 +42,11 @@ class CardsViewModel(private val cardsRepository: CardsRepository, private val r
             field = value
         }
 
-    init {
+    fun loadCards() {
         cardsRepository.getCards()
             .toObservable()
-            .subscribeOn(Schedulers.computation())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulers.io())
+            .observeOn(schedulers.mainThread())
             .doOnNext { cards ->
                 allCards = cards
                 allTypes = (cards.values.flatten().map { it.type }.toSet().toList())
@@ -53,12 +55,12 @@ class CardsViewModel(private val cardsRepository: CardsRepository, private val r
             .map<CardsViewState> { cards -> CardsData(cards.values.flatten()) }
             .startWith(CardsLoading)
             .onErrorReturn(::CardsError)
-            .subscribe(_state::onNext) { th -> Log.e(CardsViewModel::class.java.simpleName, "ERROR", th) }
+            .subscribe(_state::onNext) { th -> Timber.tag(TAG()).e(th) }
             .disposeOnViewModelDestroy()
     }
 
     var lastSearch: String? = null
-    private set
+        private set
 
     fun onSearchQuery(text: String) {
         lastSearch = text
@@ -71,8 +73,8 @@ class CardsViewModel(private val cardsRepository: CardsRepository, private val r
                 }
                 findedCards
             }
-            .subscribeOn(Schedulers.computation())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulers.computation())
+            .observeOn(schedulers.mainThread())
             .map<CardsViewState> { cards -> CardsData(cards.values.flatten()) }
             .onErrorReturn(::CardsError)
             .startWith(CardsLoading)
@@ -86,6 +88,7 @@ class CardsViewModel(private val cardsRepository: CardsRepository, private val r
     }
 
     fun saveSearch(query: String) {
+        if (query.isEmpty()) return
         lastSearch = query
     }
 }

@@ -43,6 +43,10 @@ class CardsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
 
+        if (savedInstanceState == null) {
+            cardsViewModel.loadCards()
+        }
+
         screenState = LoadingStateDelegate(cards_list, loading)
 
         observe(cardsViewModel.state, ::onStateChanged)
