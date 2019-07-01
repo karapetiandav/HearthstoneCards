@@ -71,8 +71,10 @@ class CardsFragment : BaseFragment() {
         }
     }
 
-    private val cardsListLayoutManager = LinearLayoutManager(context)
+    private lateinit var cardsListLayoutManager: LinearLayoutManager
     private fun populateList(allCards: List<Card>) {
+        // TODO: Workaround (LayoutManager is already attached)
+        cardsListLayoutManager = LinearLayoutManager(context)
         cards_list.layoutManager = cardsListLayoutManager
         cards_list.adapter = CardsAdapter(allCards) {
             cardsViewModel.onCardClick(it)
@@ -111,8 +113,8 @@ class CardsFragment : BaseFragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun onPause() {
+        super.onPause()
 
         cardsViewModel.itemPosition = cardsListLayoutManager.findFirstVisibleItemPosition()
         cardsViewModel.saveSearch(searchView.query.toString())
