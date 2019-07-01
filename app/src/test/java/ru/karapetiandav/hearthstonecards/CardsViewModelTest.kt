@@ -20,7 +20,6 @@ import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsLoading
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsViewState
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsViewModel
 import ru.karapetiandav.hearthstonecards.features.shared.CardsRepository
-import ru.karapetiandav.hearthstonecards.providers.rx.SchedulersProvider
 import ru.terrakok.cicerone.Router
 
 inline fun <reified T> mock() = Mockito.mock(T::class.java)

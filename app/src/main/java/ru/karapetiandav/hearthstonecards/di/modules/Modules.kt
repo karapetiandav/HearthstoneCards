@@ -7,6 +7,7 @@ import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsViewMode
 import ru.karapetiandav.hearthstonecards.features.shared.CardsRepository
 import ru.karapetiandav.hearthstonecards.features.shared.CardsRepositoryImpl
 import ru.karapetiandav.hearthstonecards.main.viewmodel.MainViewModel
+import ru.karapetiandav.hearthstonecards.providers.rx.SchedulersProvider
 import ru.karapetiandav.hearthstonecards.providers.rx.SchedulersProviderImpl
 import ru.karapetiandav.hearthstonecards.services.ApiService
 import ru.karapetiandav.hearthstonecards.services.ConnectivityService
@@ -21,7 +22,7 @@ object Modules {
         single<NavigatorHolder> { get<Cicerone<Router>>().navigatorHolder }
         single { ApiService(get(), get()) }
         single { ConnectivityService(get()) }
-        single { SchedulersProviderImpl() }
+        single<SchedulersProvider> { SchedulersProviderImpl() }
     }
 
     val mainModule = module {
