@@ -1,217 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".features.cards.ui.fragments.CardDetailsFragment">
+    android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        style="@style/toolbar"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/card_img"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintDimensionRatio="0.73"
-        app:layout_constraintEnd_toStartOf="@+id/gold_card_img"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        tools:srcCompat="@drawable/cardback" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_scrollFlags="scroll|enterAlways" />
 
-    <ImageView
-        android:id="@+id/gold_card_img"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintDimensionRatio="0.73"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/card_img"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        tools:srcCompat="@drawable/cardback" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/detailsGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="card_img,gold_card_img,card_type,card_player_class_text,card_rarity_text,card_set,card_player_class,card_faction,card_rarity,card_cost,card_set_text,card_faction_text,card_cost_text,card_type_text" />
-
-    <ProgressBar
-        android:id="@+id/loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
-
-    <TextView
-        android:id="@+id/card_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        tools:text="Name" />
-
-    <TextView
-        android:id="@+id/card_set"
-        style="@style/card_category_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/card_detail_set"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_name" />
-
-    <TextView
-        android:id="@+id/card_set_text"
-        style="@style/card_category_text_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/card_set"
-        app:layout_constraintStart_toEndOf="@+id/card_set"
-        app:layout_constraintTop_toTopOf="@+id/card_set"
-        tools:text="Basic" />
-
-    <TextView
-        android:id="@+id/card_type"
-        style="@style/card_category_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/card_detail_type"
-        app:layout_constraintStart_toStartOf="@+id/card_set"
-        app:layout_constraintTop_toBottomOf="@+id/card_set" />
-
-    <TextView
-        android:id="@+id/card_type_text"
-        style="@style/card_category_text_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/card_type"
-        app:layout_constraintStart_toEndOf="@+id/card_type"
-        app:layout_constraintTop_toTopOf="@+id/card_type"
-        tools:text="Basic" />
-
-    <TextView
-        android:id="@+id/card_faction"
-        style="@style/card_category_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/card_detail_faction"
-        app:layout_constraintStart_toStartOf="@+id/card_type"
-        app:layout_constraintTop_toBottomOf="@+id/card_type" />
-
-    <TextView
-        android:id="@+id/card_faction_text"
-        style="@style/card_category_text_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/card_faction"
-        app:layout_constraintStart_toEndOf="@id/card_faction"
-        app:layout_constraintTop_toTopOf="@+id/card_faction"
-        tools:text="Basic" />
-
-    <TextView
-        android:id="@+id/card_rarity"
-        style="@style/card_category_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/card_detail_rarity"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintBottom_toBottomOf="@+id/card_rarity_text"
-        app:layout_constraintEnd_toStartOf="@+id/card_rarity_text"
-        app:layout_constraintTop_toTopOf="@+id/card_rarity_text" />
-
-    <TextView
-        android:id="@+id/card_rarity_text"
-        style="@style/card_category_text_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_name"
-        tools:text="Basic" />
-
-    <TextView
-        android:id="@+id/card_cost"
-        style="@style/card_category_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/card_detail_cost"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toStartOf="@+id/card_cost_text"
-        app:layout_constraintTop_toBottomOf="@+id/card_rarity" />
-
-    <TextView
-        android:id="@+id/card_cost_text"
-        style="@style/card_category_text_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_rarity_text"
-        tools:text="Basic" />
-
-    <TextView
-        android:id="@+id/card_player_class"
-        style="@style/card_category_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/card_detail_player_class"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toStartOf="@+id/card_player_class_text"
-        app:layout_constraintTop_toBottomOf="@+id/card_cost" />
-
-    <TextView
-        android:id="@+id/card_player_class_text"
-        style="@style/card_category_text_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_cost_text"
-        tools:text="Basic" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <include
+            layout="@layout/card_details_content"
+            tools:layout_editor_absoluteX="0dp" />
+    </LinearLayout>
+</ScrollView>

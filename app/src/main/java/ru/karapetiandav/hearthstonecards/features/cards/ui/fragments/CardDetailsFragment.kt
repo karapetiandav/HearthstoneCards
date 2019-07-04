@@ -4,14 +4,15 @@ package ru.karapetiandav.hearthstonecards.features.cards.ui.fragments
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.redmadrobot.lib.sd.LoadingStateDelegate
+import kotlinx.android.synthetic.main.card_details_content.*
 import kotlinx.android.synthetic.main.fragment_card_details.*
-import kotlinx.android.synthetic.main.fragment_cards.toolbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.karapetiandav.hearthstonecards.R
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.*
@@ -31,7 +32,7 @@ class CardDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        screenState = LoadingStateDelegate(detailsGroup, loading)
+        screenState = LoadingStateDelegate(loadingView = loading)
 
         observe(cardsViewModel.state, ::onStateChanged)
         val activity = activity as? AppCompatActivity ?: return
@@ -65,12 +66,35 @@ class CardDetailsFragment : Fragment() {
                         .placeholder(R.drawable.cardback)
                         .into(gold_card_img)
                     card_name.text = name
-                    card_set_text.text = cardSet
-                    card_type_text.text = type
-                    card_faction_text.text = faction
-                    card_rarity_text.text = rarity
-                    card_player_class_text.text = playerClass
-                    card_cost_text.text = cost.toString()
+                    cardSet?.let {
+                        card_set.visibility = VISIBLE
+                        card_set.text = getString(R.string.card_detail_set, cardSet)
+                    }
+
+                    cardSet?.let {
+                        card_type.visibility = VISIBLE
+                        card_type.text = getString(R.string.card_detail_type, type)
+                    }
+
+                    faction?.let {
+                        card_faction.visibility = VISIBLE
+                        card_faction.text = getString(R.string.card_detail_faction, it)
+                    }
+
+                    rarity?.let {
+                        card_rarity.visibility = VISIBLE
+                        card_rarity.text = getString(R.string.card_detail_rarity, rarity)
+                    }
+
+                    cost?.let {
+                        card_cost.visibility = VISIBLE
+                        card_cost.text = getString(R.string.card_detail_cost, cost)
+                    }
+
+                    playerClass?.let {
+                        card_player_class.visibility = VISIBLE
+                        card_player_class.text = getString(R.string.card_detail_player_class, playerClass)
+                    }
                 }
             }
             is CardDetailsLoading -> {

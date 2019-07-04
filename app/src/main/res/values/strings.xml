@@ -6,10 +6,10 @@
     <string name="cards_bottom_sheet_type_text">Card type</string>
     <string name="cards_menu_filter_title">Filter</string>
 
-    <string name="card_detail_set">Set:</string>
-    <string name="card_detail_type">Type:</string>
-    <string name="card_detail_faction">Faction:</string>
-    <string name="card_detail_rarity">Rarity:</string>
-    <string name="card_detail_cost">Cost:</string>
-    <string name="card_detail_player_class">Player Class:</string>
+    <string name="card_detail_set">Set: %1$s</string>
+    <string name="card_detail_type">Type: %1$s</string>
+    <string name="card_detail_faction">Faction: %1$s</string>
+    <string name="card_detail_rarity">Rarity: %1$s</string>
+    <string name="card_detail_cost">Cost: %1$d</string>
+    <string name="card_detail_player_class">Player Class: %1$s</string>
 </resources>
