@@ -49,7 +49,7 @@ class CardsViewModel(
             .observeOn(schedulers.mainThread())
             .doOnNext { cards ->
                 allCards = cards
-                allTypes = (cards.values.flatten().map { it.type }.toSet().toList())
+                allTypes = (cards.values.flatten().mapNotNull { it.type }.toSet().toList())
                 currentSelectedTypes.addAll(allTypes)
             }
             .map<CardsViewState> { cards -> CardsData(cards.values.flatten()) }
@@ -69,7 +69,7 @@ class CardsViewModel(
             .map { allCards ->
                 val findedCards = mutableMapOf<String, List<Card>>()
                 allCards.forEach { (key, value) ->
-                    findedCards[key] = value.filter { it.name.toLowerCase().contains(text.toLowerCase()) }
+                    findedCards[key] = value.filter { it.name?.toLowerCase()?.contains(text.toLowerCase()) ?: false }
                 }
                 findedCards
             }

@@ -56,7 +56,7 @@ class CardDetailsFragment : Fragment() {
             }
             is CardDetailsFullData -> {
                 screenState.showContent()
-                with(state.detailedCard) {
+                with(state.card) {
                     Glide.with(this@CardDetailsFragment)
                         .load(img)
                         .placeholder(R.drawable.cardback)
