@@ -7,13 +7,15 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.jakewharton.rxbinding3.appcompat.queryTextChangeEvents
 import com.redmadrobot.lib.sd.LoadingStateDelegate
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.android.synthetic.main.cards_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_cards.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.karapetiandav.hearthstonecards.R
 import ru.karapetiandav.hearthstonecards.base.fragment.BaseFragment
 import ru.karapetiandav.hearthstonecards.features.cards.models.Card
 import ru.karapetiandav.hearthstonecards.features.cards.ui.adapter.CardsAdapter
@@ -51,6 +53,25 @@ class CardsFragment : BaseFragment() {
 
         observe(cardsViewModel.state, ::onStateChanged)
         observe(cardsViewModel.events, ::onEventReceived)
+
+        val bottomSheet = BottomSheetBehavior.from(bottom_sheet)
+        onSlideBehavior(bottomSheet)
+    }
+
+    private fun onSlideBehavior(bottomSheet: BottomSheetBehavior<CardView>) {
+        filter_fab.setOnClickListener {
+            bottomSheet.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+        }
+
+        bottomSheet.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                filter_fab.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
+            }
+        })
     }
 
     private fun onEventReceived(event: Event) {
@@ -88,10 +109,10 @@ class CardsFragment : BaseFragment() {
 
     private lateinit var searchView: SearchView
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        activity?.menuInflater?.inflate(R.menu.cards_menu, menu)
+        activity?.menuInflater?.inflate(ru.karapetiandav.hearthstonecards.R.menu.cards_menu, menu)
 
         val searchManager = context?.getSystemService(SEARCH_SERVICE) as SearchManager
-        val searchItem = menu?.findItem(R.id.cards_search)
+        val searchItem = menu?.findItem(ru.karapetiandav.hearthstonecards.R.id.cards_search)
         searchView = searchItem?.actionView as SearchView
         searchView.setSearchableInfo(searchManager.getSearchableInfo(activity?.componentName))
 

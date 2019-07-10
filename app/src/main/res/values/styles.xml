@@ -24,4 +24,9 @@
         <item name="android:textStyle">bold|italic</item>
     </style>
 
+    <style name="bottom_sheet_title">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
