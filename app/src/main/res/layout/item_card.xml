@@ -49,7 +49,7 @@
             tools:text="Malfurion Stormrage" />
 
         <TextView
-            android:id="@+id/card_type"
+            android:id="@+id/card_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -86,12 +86,12 @@
             android:layout_marginStart="32dp"
             android:text="@string/card_detail_set"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/card_type"
+            app:layout_constraintBottom_toTopOf="@+id/card_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/card_player_class" />
 
         <TextView
-            android:id="@+id/card_type"
+            android:id="@+id/card_title"
             style="@style/card_category_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/card_rarity"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_type" />
+            app:layout_constraintTop_toBottomOf="@+id/card_title" />
 
         <TextView
             android:id="@+id/card_rarity"
@@ -128,7 +128,7 @@
             app:layout_constraintTop_toBottomOf="@+id/card_faction" />
 
         <TextView
-            android:id="@+id/card_cost"
+            android:id="@+id/card_type"
             style="@style/card_category_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -151,7 +151,7 @@
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/card_set"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_cost" />
+            app:layout_constraintTop_toBottomOf="@+id/card_type" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

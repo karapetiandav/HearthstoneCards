@@ -72,8 +72,8 @@ class CardDetailsFragment : Fragment() {
                     }
 
                     cardSet?.let {
-                        card_type.visibility = VISIBLE
-                        card_type.text = getString(R.string.card_detail_type, type)
+                        card_title.visibility = VISIBLE
+                        card_title.text = getString(R.string.card_detail_type, type?.value)
                     }
 
                     faction?.let {
@@ -87,13 +87,13 @@ class CardDetailsFragment : Fragment() {
                     }
 
                     cost?.let {
-                        card_cost.visibility = VISIBLE
-                        card_cost.text = getString(R.string.card_detail_cost, cost)
+                        card_type.visibility = VISIBLE
+                        card_type.text = getString(R.string.card_detail_cost, cost.value)
                     }
 
                     playerClass?.let {
                         card_player_class.visibility = VISIBLE
-                        card_player_class.text = getString(R.string.card_detail_player_class, playerClass)
+                        card_player_class.text = getString(R.string.card_detail_player_class, playerClass.value)
                     }
                 }
             }

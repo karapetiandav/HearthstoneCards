@@ -5,7 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import io.reactivex.Observable
 import ru.karapetiandav.hearthstonecards.CardDetailsScreen
 import ru.karapetiandav.hearthstonecards.base.viewmodel.BaseViewModel
-import ru.karapetiandav.hearthstonecards.features.cards.models.Card
+import ru.karapetiandav.hearthstonecards.features.cards.models.*
+import ru.karapetiandav.hearthstonecards.features.cards.ui.adapter.ChipsViewModel
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsData
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsError
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsLoading
@@ -16,6 +17,12 @@ import ru.karapetiandav.tinkoffintership.lifecycle.EventsQueue
 import ru.karapetiandav.tinkoffintership.lifecycle.onNext
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
+
+data class FilterDTO(
+    val type: List<ChipsViewModel>,
+    val cost: List<ChipsViewModel>,
+    val playerClass: List<ChipsViewModel>
+)
 
 class CardsViewModel(
     private val cardsRepository: CardsRepository,
@@ -28,8 +35,9 @@ class CardsViewModel(
         get() = _state
     val events = EventsQueue()
 
-    private var allTypes: List<String> = emptyList()
-    private val currentSelectedTypes = mutableListOf<String>()
+    private val _filterData = MutableLiveData<FilterDTO>()
+    val filterData: LiveData<FilterDTO>
+        get() = _filterData
 
     private var allCards: Map<String, List<Card>> = emptyMap()
 
@@ -49,10 +57,21 @@ class CardsViewModel(
             .observeOn(schedulers.mainThread())
             .doOnNext { cards ->
                 allCards = cards
-                allTypes = (cards.values.flatten().mapNotNull { it.type }.toSet().toList())
-                currentSelectedTypes.addAll(allTypes)
+                val allTypes = (cards.values.flatten().mapNotNull { it.type }.distinctBy { it })
+                val allCosts = (cards.values.flatten().mapNotNull { it.cost }.distinctBy { it })
+                val allClasses = (cards.values.flatten().mapNotNull { it.playerClass }.distinctBy { it })
+
+                selectedTypes.addAll(allTypes)
+                selectedCosts.addAll(allCosts)
+                selectedPlayerClasses.addAll(allClasses)
+
+                _filterData.value = FilterDTO(
+                    allTypes.map { ChipsViewModel(it, true) },
+                    allCosts.map { ChipsViewModel(it, true) },
+                    allClasses.map { ChipsViewModel(it, true) }
+                )
             }
-            .map<CardsViewState> { cards -> CardsData(cards.values.flatten()) }
+            .map<CardsViewState> { cards -> CardsData(cards.values.flatten().sortedBy { it.name }) }
             .startWith(CardsLoading)
             .onErrorReturn(::CardsError)
             .subscribe(_state::onNext) { th -> Timber.tag(TAG()).e(th) }
@@ -75,7 +94,7 @@ class CardsViewModel(
             }
             .subscribeOn(schedulers.computation())
             .observeOn(schedulers.mainThread())
-            .map<CardsViewState> { cards -> CardsData(cards.values.flatten()) }
+            .map<CardsViewState> { cards -> CardsData(cards.values.flatten().sortedBy { it.name }) }
             .onErrorReturn(::CardsError)
             .startWith(CardsLoading)
             .subscribe(_state::onNext)
@@ -90,5 +109,38 @@ class CardsViewModel(
     fun saveSearch(query: String) {
         if (query.isEmpty()) return
         lastSearch = query
+    }
+
+    private val selectedTypes = mutableListOf<Type>()
+    private val selectedCosts = mutableListOf<Cost>()
+    private val selectedPlayerClasses = mutableListOf<PlayerClass>()
+    fun onItemUncheck(filterable: Filterable) {
+        when (filterable) {
+            is Type -> selectedTypes.remove(filterable)
+            is Cost -> selectedCosts.remove(filterable)
+            is PlayerClass -> selectedPlayerClasses.remove(filterable)
+        }
+
+        val newList = allCards.values
+            .flatten()
+            .filter { selectedTypes.contains(it.type) && selectedCosts.contains(it.cost) && selectedPlayerClasses.contains(it.playerClass) }
+            .sortedBy { it.name }
+        Timber.tag(TAG()).d(newList.distinctBy { it.type }.map { it.type }.joinToString())
+        _state.onNext(CardsData(newList))
+    }
+
+    fun onItemCheck(filterable: Filterable) {
+        when (filterable) {
+            is Type -> selectedTypes.add(filterable)
+            is Cost -> selectedCosts.add(filterable)
+            is PlayerClass -> selectedPlayerClasses.add(filterable)
+        }
+
+        val newList = allCards.values
+            .flatten()
+            .filter { selectedTypes.contains(it.type) && selectedCosts.contains(it.cost) && selectedPlayerClasses.contains(it.playerClass) }
+            .sortedBy { it.name }
+        Timber.tag(TAG()).d(newList.distinctBy { it.type }.map { it.type }.joinToString())
+        _state.onNext(CardsData(newList))
     }
 }

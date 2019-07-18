@@ -1,6 +1,7 @@
 package ru.karapetiandav.hearthstonecards.services
 
 import android.content.Context
+import com.google.gson.GsonBuilder
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -9,7 +10,10 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.karapetiandav.hearthstonecards.features.cards.models.Card
+import ru.karapetiandav.hearthstonecards.features.cards.models.CardDeserializer
 import ru.karapetiandav.hearthstonecards.network.CardsApi
+import java.util.concurrent.TimeUnit
 
 class ApiService(private val connectivityService: ConnectivityService, private val context: Context) {
 
@@ -18,12 +22,13 @@ class ApiService(private val connectivityService: ConnectivityService, private v
 
     init {
         val httpClient = buildHttpClient()
+        val gson = GsonBuilder().registerTypeAdapter(Card::class.java, CardDeserializer()).create()
 
         retrofit = Retrofit.Builder()
             .client(httpClient)
             .baseUrl(BASE_URL)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
 
@@ -41,6 +46,7 @@ class ApiService(private val connectivityService: ConnectivityService, private v
             .addInterceptor(loggingInterceptor)
             .addInterceptor(cacheInterceptor)
             .addNetworkInterceptor(cacheInterceptor)
+            .readTimeout(15L, TimeUnit.SECONDS)
             .build()
     }
 

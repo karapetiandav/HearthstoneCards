@@ -11,7 +11,7 @@ interface CardsApi {
     @GET("cards")
     // TODO: Положить ключ куда-нибудь
     @Headers("X-RapidAPI-Key:735b7bce73msh6fb4ab17b96daa1p14bd78jsnbd65e6ed3ce9")
-    fun getCards(@Query("cost") cost: Int): Single<Map<String, List<Card>>>
+    fun getCards(): Single<Map<String, List<Card>>>
 
     @GET("cards/{name}")
     @Headers("X-RapidAPI-Key:735b7bce73msh6fb4ab17b96daa1p14bd78jsnbd65e6ed3ce9")

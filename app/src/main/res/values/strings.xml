@@ -3,13 +3,12 @@
 
     <string name="cards_toolbar_title">All cards</string>
     <string name="cards_menu_search_text">Search</string>
-    <string name="cards_bottom_sheet_type_text">Card type</string>
-    <string name="cards_menu_filter_title">Filter</string>
+    <string name="cards_bottom_sheet_type_text">Filter</string>
 
     <string name="card_detail_set">Set: %1$s</string>
     <string name="card_detail_type">Type: %1$s</string>
     <string name="card_detail_faction">Faction: %1$s</string>
     <string name="card_detail_rarity">Rarity: %1$s</string>
-    <string name="card_detail_cost">Cost: %1$d</string>
+    <string name="card_detail_cost">Cost: %1$s</string>
     <string name="card_detail_player_class">Player Class: %1$s</string>
 </resources>

@@ -1,6 +1,7 @@
 package ru.karapetiandav.hearthstonecards.base.fragment
 
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -17,4 +18,6 @@ abstract class BaseFragment: Fragment() {
         compositeDisposable.add(this)
         return this
     }
+
+    fun Fragment.TAG(): String = this::class.java.simpleName
 }

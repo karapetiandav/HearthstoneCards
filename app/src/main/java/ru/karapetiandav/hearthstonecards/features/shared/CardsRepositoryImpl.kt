@@ -7,7 +7,7 @@ import ru.karapetiandav.hearthstonecards.services.ApiService
 
 class CardsRepositoryImpl(private val apiService: ApiService) : CardsRepository {
     override fun getCards(): Single<Map<String, List<Card>>> {
-        return apiService.getCardsApi().getCards(0)
+        return apiService.getCardsApi().getCards()
             .subscribeOn(Schedulers.io())
     }
 

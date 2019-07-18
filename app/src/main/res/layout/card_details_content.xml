@@ -88,7 +88,7 @@
             tools:visibility="visible" />
 
         <TextView
-            android:id="@+id/card_type"
+            android:id="@+id/card_title"
             style="@style/card_category_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
             tools:visibility="visible" />
 
         <TextView
-            android:id="@+id/card_cost"
+            android:id="@+id/card_type"
             style="@style/card_category_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

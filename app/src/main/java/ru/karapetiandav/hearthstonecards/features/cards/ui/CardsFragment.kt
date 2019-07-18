@@ -16,25 +16,34 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.cards_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_cards.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.karapetiandav.hearthstonecards.base.BackPressHandler
 import ru.karapetiandav.hearthstonecards.base.fragment.BaseFragment
 import ru.karapetiandav.hearthstonecards.features.cards.models.Card
+import ru.karapetiandav.hearthstonecards.features.cards.models.Filterable
 import ru.karapetiandav.hearthstonecards.features.cards.ui.adapter.CardsAdapter
+import ru.karapetiandav.hearthstonecards.features.cards.ui.adapter.ChipsAdapter
+import ru.karapetiandav.hearthstonecards.features.cards.ui.adapter.OnItemCheckListener
+import ru.karapetiandav.hearthstonecards.features.cards.ui.adapter.dividers.HorizontalSpaceItemDecoration
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsData
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsError
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsLoading
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsViewState
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsViewModel
+import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.FilterDTO
 import ru.karapetiandav.tinkoffintership.lifecycle.Event
 import ru.karapetiandav.tinkoffintership.lifecycle.observe
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 
-class CardsFragment : BaseFragment() {
+class CardsFragment : BaseFragment(), BackPressHandler {
 
     private lateinit var screenState: LoadingStateDelegate
 
     private val cardsViewModel: CardsViewModel by viewModel()
+
+    private var isOpen = false
+    private val bottomSheet by lazy { BottomSheetBehavior.from(bottom_sheet) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -53,19 +62,48 @@ class CardsFragment : BaseFragment() {
 
         observe(cardsViewModel.state, ::onStateChanged)
         observe(cardsViewModel.events, ::onEventReceived)
+        observe(cardsViewModel.filterData, ::onFilterDataReceived)
 
-        val bottomSheet = BottomSheetBehavior.from(bottom_sheet)
         onSlideBehavior(bottomSheet)
+    }
+
+
+    private val itemCheckListener = object : OnItemCheckListener {
+        override fun onItemCheck(filterable: Filterable) {
+            cardsViewModel.onItemCheck(filterable)
+        }
+
+        override fun onItemUncheck(filterable: Filterable) {
+            cardsViewModel.onItemUncheck(filterable)
+        }
+    }
+
+    private fun onFilterDataReceived(filterDTO: FilterDTO) {
+        card_type_list.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = ChipsAdapter(filterDTO.type, itemCheckListener)
+            addItemDecoration(HorizontalSpaceItemDecoration(8, 16, 16))
+        }
+        card_cost_list.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = ChipsAdapter(filterDTO.cost, itemCheckListener)
+            addItemDecoration(HorizontalSpaceItemDecoration(8, 16, 16))
+        }
+        card_player_class_list.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = ChipsAdapter(filterDTO.playerClass, itemCheckListener)
+            addItemDecoration(HorizontalSpaceItemDecoration(8, 16, 16))
+        }
     }
 
     private fun onSlideBehavior(bottomSheet: BottomSheetBehavior<CardView>) {
         filter_fab.setOnClickListener {
-            bottomSheet.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+            bottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
         }
 
         bottomSheet.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-
+                isOpen = newState != BottomSheetBehavior.STATE_COLLAPSED
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
@@ -94,7 +132,7 @@ class CardsFragment : BaseFragment() {
 
     private lateinit var cardsListLayoutManager: LinearLayoutManager
     private fun populateList(allCards: List<Card>) {
-        // TODO: Workaround (LayoutManager is already attached)
+        // TODO: Workaround (Error LayoutManager is already attached)
         cardsListLayoutManager = LinearLayoutManager(context)
         cards_list.layoutManager = cardsListLayoutManager
         cards_list.adapter = CardsAdapter(allCards) {
@@ -139,5 +177,14 @@ class CardsFragment : BaseFragment() {
 
         cardsViewModel.itemPosition = cardsListLayoutManager.findFirstVisibleItemPosition()
         cardsViewModel.saveSearch(searchView.query.toString())
+    }
+
+    override fun onBackPressed(): Boolean {
+        return if (isOpen) {
+            bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+            true
+        } else {
+            false
+        }
     }
 }
