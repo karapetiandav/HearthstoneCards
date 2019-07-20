@@ -40,7 +40,7 @@ class CardDeserializer : JsonDeserializer<Card> {
             Type(jsonObject?.get("type")?.asString ?: ""),
             jsonObject?.get("faction")?.asString,
             jsonObject?.get("rarity")?.asString,
-            Cost(jsonObject?.get("cost")?.asInt.toString()),
+            Cost((jsonObject?.get("cost")?.asInt ?: 0).toString()),
             jsonObject?.get("attack")?.asInt,
             jsonObject?.get("health")?.asInt,
             jsonObject?.get("text")?.asString,
@@ -49,7 +49,7 @@ class CardDeserializer : JsonDeserializer<Card> {
             jsonObject?.get("collectible")?.asBoolean,
             jsonObject?.get("elite")?.asBoolean,
             jsonObject?.get("race")?.asString,
-            PlayerClass(jsonObject?.get("playerClass")?.asString ?: ""),
+            PlayerClass(jsonObject?.get("playerClass")?.asString ?: "Unknown"),
             jsonObject?.get("img")?.asString,
             jsonObject?.get("imgGold")?.asString,
             jsonObject?.get("locale")?.asString
