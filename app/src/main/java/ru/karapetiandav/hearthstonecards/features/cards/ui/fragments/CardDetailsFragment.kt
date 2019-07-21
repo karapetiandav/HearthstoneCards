@@ -17,7 +17,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.karapetiandav.hearthstonecards.R
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.*
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsDetailViewModel
-import ru.karapetiandav.tinkoffintership.lifecycle.observe
+import ru.karapetiandav.hearthstonecards.lifecycle.observe
 
 class CardDetailsFragment : Fragment() {
 

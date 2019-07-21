@@ -28,7 +28,9 @@ class CardsAdapter(private val cards: List<Card>, private val itemClick: (Card) 
             itemView.apply {
                 setOnClickListener { itemClick(card) }
                 card_name.text = card.name
-                card_title.text = card.type?.value
+                card_type.text = card.type?.value
+                card_player_class.text = card.playerClass?.value
+                card_cost.text = card.cost?.value
             }
         }
     }

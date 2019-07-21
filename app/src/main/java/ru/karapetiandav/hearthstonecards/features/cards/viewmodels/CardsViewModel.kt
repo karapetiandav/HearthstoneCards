@@ -14,7 +14,7 @@ import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsViewState
 import ru.karapetiandav.hearthstonecards.features.shared.CardsRepository
 import ru.karapetiandav.hearthstonecards.providers.rx.SchedulersProvider
 import ru.karapetiandav.tinkoffintership.lifecycle.EventsQueue
-import ru.karapetiandav.tinkoffintership.lifecycle.onNext
+import ru.karapetiandav.hearthstonecards.lifecycle.onNext
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
 

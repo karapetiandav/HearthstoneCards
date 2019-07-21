@@ -9,10 +9,15 @@ import ru.karapetiandav.hearthstonecards.features.cards.models.Filterable
 
 data class ChipsViewModel(val filterable: Filterable, val checked: Boolean)
 
-class ChipsAdapter(
-    var chipsModel: List<ChipsViewModel>,
-    private val onItemCheckListener: OnItemCheckListener
-) : RecyclerView.Adapter<ChipsAdapter.ChipsViewHolder>() {
+class ChipsAdapter(private val onItemCheckListener: OnItemCheckListener) :
+    RecyclerView.Adapter<ChipsAdapter.ChipsViewHolder>() {
+
+    private var chipsModel = emptyList<ChipsViewModel>()
+
+    fun setItems(chipsModel: List<ChipsViewModel>) {
+        this.chipsModel = chipsModel
+        notifyDataSetChanged()
+    }
 
     private val itemStateArray = mutableMapOf<Int, Boolean>()
 

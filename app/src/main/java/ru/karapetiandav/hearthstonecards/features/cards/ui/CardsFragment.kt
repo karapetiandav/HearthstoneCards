@@ -30,8 +30,8 @@ import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsLoading
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsViewState
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsViewModel
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.FilterDTO
+import ru.karapetiandav.hearthstonecards.lifecycle.observe
 import ru.karapetiandav.tinkoffintership.lifecycle.Event
-import ru.karapetiandav.tinkoffintership.lifecycle.observe
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -43,7 +43,6 @@ class CardsFragment : BaseFragment(), BackPressHandler {
     private val cardsViewModel: CardsViewModel by viewModel()
 
     private var isOpen = false
-    private val bottomSheet by lazy { BottomSheetBehavior.from(bottom_sheet) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -64,9 +63,11 @@ class CardsFragment : BaseFragment(), BackPressHandler {
         observe(cardsViewModel.events, ::onEventReceived)
         observe(cardsViewModel.filterData, ::onFilterDataReceived)
 
+        initBottomSheetLists()
+
+        val bottomSheet = BottomSheetBehavior.from(bottom_sheet)
         onSlideBehavior(bottomSheet)
     }
-
 
     private val itemCheckListener = object : OnItemCheckListener {
         override fun onItemCheck(filterable: Filterable) {
@@ -78,22 +79,31 @@ class CardsFragment : BaseFragment(), BackPressHandler {
         }
     }
 
-    private fun onFilterDataReceived(filterDTO: FilterDTO) {
+    private val typeAdapter = ChipsAdapter(itemCheckListener)
+    private val costAdapter = ChipsAdapter(itemCheckListener)
+    private val playerClassAdapter = ChipsAdapter(itemCheckListener)
+    private fun initBottomSheetLists() {
         card_type_list.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = ChipsAdapter(filterDTO.type, itemCheckListener)
+            adapter = typeAdapter
             addItemDecoration(HorizontalSpaceItemDecoration(8, 16, 16))
         }
         card_cost_list.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = ChipsAdapter(filterDTO.cost, itemCheckListener)
+            adapter = costAdapter
             addItemDecoration(HorizontalSpaceItemDecoration(8, 16, 16))
         }
         card_player_class_list.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = ChipsAdapter(filterDTO.playerClass, itemCheckListener)
+            adapter = playerClassAdapter
             addItemDecoration(HorizontalSpaceItemDecoration(8, 16, 16))
         }
+    }
+
+    private fun onFilterDataReceived(filterDTO: FilterDTO) {
+        typeAdapter.setItems(filterDTO.type.sortedBy { it.filterable.value })
+        costAdapter.setItems(filterDTO.cost.sortedBy { it.filterable.value.toIntOrNull() })
+        playerClassAdapter.setItems(filterDTO.playerClass.sortedBy { it.filterable.value })
     }
 
     private fun onSlideBehavior(bottomSheet: BottomSheetBehavior<CardView>) {
@@ -181,6 +191,7 @@ class CardsFragment : BaseFragment(), BackPressHandler {
 
     override fun onBackPressed(): Boolean {
         return if (isOpen) {
+            val bottomSheet = BottomSheetBehavior.from(bottom_sheet)
             bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
             true
         } else {

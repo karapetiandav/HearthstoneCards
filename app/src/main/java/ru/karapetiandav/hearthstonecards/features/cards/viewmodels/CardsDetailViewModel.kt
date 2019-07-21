@@ -8,7 +8,7 @@ import ru.karapetiandav.hearthstonecards.CardsScreen
 import ru.karapetiandav.hearthstonecards.base.viewmodel.BaseViewModel
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.*
 import ru.karapetiandav.hearthstonecards.features.shared.CardsRepository
-import ru.karapetiandav.tinkoffintership.lifecycle.onNext
+import ru.karapetiandav.hearthstonecards.lifecycle.onNext
 import ru.terrakok.cicerone.Router
 
 class CardsDetailViewModel(cardsRepository: CardsRepository, private val router: Router) : BaseViewModel() {
