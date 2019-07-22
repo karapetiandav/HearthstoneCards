@@ -12,9 +12,9 @@ import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsError
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsLoading
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsViewState
 import ru.karapetiandav.hearthstonecards.features.shared.CardsRepository
+import ru.karapetiandav.hearthstonecards.lifecycle.onNext
 import ru.karapetiandav.hearthstonecards.providers.rx.SchedulersProvider
 import ru.karapetiandav.tinkoffintership.lifecycle.EventsQueue
-import ru.karapetiandav.hearthstonecards.lifecycle.onNext
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
 
@@ -61,9 +61,11 @@ class CardsViewModel(
                 val allCosts = (cards.values.flatten().mapNotNull { it.cost }.distinctBy { it })
                 val allClasses = (cards.values.flatten().mapNotNull { it.playerClass }.distinctBy { it })
 
-                selectedTypes.addAll(allTypes)
-                selectedCosts.addAll(allCosts)
-                selectedPlayerClasses.addAll(allClasses)
+                if (selectedTypes.isEmpty()) selectedTypes.addAll(allTypes)
+                if (selectedCosts.isEmpty()) selectedCosts.addAll(allCosts)
+                if (selectedPlayerClasses.isEmpty()) selectedPlayerClasses.addAll(allClasses)
+
+                applyFilters()
 
                 _filterData.value = FilterDTO(
                     allTypes.map { ChipsViewModel(it, true) },
@@ -76,6 +78,18 @@ class CardsViewModel(
             .onErrorReturn(::CardsError)
             .subscribe(_state::onNext) { th -> Timber.tag(TAG()).e(th) }
             .disposeOnViewModelDestroy()
+    }
+
+    private fun applyFilters() {
+        val newList = allCards.values
+            .flatten()
+            .filter {
+                selectedTypes.contains(it.type)
+                        && selectedCosts.contains(it.cost)
+                        && selectedPlayerClasses.contains(it.playerClass)
+            }
+            .sortedBy { it.name }
+        _state.onNext(CardsData(newList))
     }
 
     var lastSearch: String? = null
@@ -123,7 +137,11 @@ class CardsViewModel(
 
         val newList = allCards.values
             .flatten()
-            .filter { selectedTypes.contains(it.type) && selectedCosts.contains(it.cost) && selectedPlayerClasses.contains(it.playerClass) }
+            .filter {
+                selectedTypes.contains(it.type)
+                        && selectedCosts.contains(it.cost)
+                        && selectedPlayerClasses.contains(it.playerClass)
+            }
             .sortedBy { it.name }
         Timber.tag(TAG()).d(newList.distinctBy { it.type }.map { it.type }.joinToString())
         _state.onNext(CardsData(newList))
@@ -138,7 +156,11 @@ class CardsViewModel(
 
         val newList = allCards.values
             .flatten()
-            .filter { selectedTypes.contains(it.type) && selectedCosts.contains(it.cost) && selectedPlayerClasses.contains(it.playerClass) }
+            .filter {
+                selectedTypes.contains(it.type)
+                        && selectedCosts.contains(it.cost)
+                        && selectedPlayerClasses.contains(it.playerClass)
+            }
             .sortedBy { it.name }
         Timber.tag(TAG()).d(newList.distinctBy { it.type }.map { it.type }.joinToString())
         _state.onNext(CardsData(newList))
