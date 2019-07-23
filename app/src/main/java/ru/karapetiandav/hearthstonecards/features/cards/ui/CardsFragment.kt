@@ -16,8 +16,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.cards_bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_cards.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.karapetiandav.hearthstonecards.R
 import ru.karapetiandav.hearthstonecards.base.BackPressHandler
 import ru.karapetiandav.hearthstonecards.base.fragment.BaseFragment
+import ru.karapetiandav.hearthstonecards.base.layout.ErrorLayoutData
 import ru.karapetiandav.hearthstonecards.features.cards.models.Card
 import ru.karapetiandav.hearthstonecards.features.cards.models.Filterable
 import ru.karapetiandav.hearthstonecards.features.cards.ui.adapter.CardsAdapter
@@ -46,7 +48,7 @@ class CardsFragment : BaseFragment(), BackPressHandler {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
-        return inflater.inflate(ru.karapetiandav.hearthstonecards.R.layout.fragment_cards, container, false)
+        return inflater.inflate(R.layout.fragment_cards, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,7 +59,7 @@ class CardsFragment : BaseFragment(), BackPressHandler {
             cardsViewModel.loadCards()
         }
 
-        screenState = LoadingStateDelegate(cards_list, loading)
+        screenState = LoadingStateDelegate(cards_list, loading, error_layout)
 
         observe(cardsViewModel.state, ::onStateChanged)
         observe(cardsViewModel.events, ::onEventReceived)
@@ -135,6 +137,12 @@ class CardsFragment : BaseFragment(), BackPressHandler {
                 screenState.showLoading()
             }
             is CardsError -> {
+                screenState.showStub(
+                    ErrorLayoutData(
+                        R.drawable.ic_error_24dp,
+                        getString(R.string.error_title),
+                        getString(R.string.error_description)
+                ))
                 Timber.tag("CardsFragment").e(viewState.error)
             }
         }

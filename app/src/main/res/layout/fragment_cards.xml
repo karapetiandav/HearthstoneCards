@@ -35,10 +35,20 @@
             android:id="@+id/loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/cards_list"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/cards_list" />
+            app:layout_constraintTop_toTopOf="@+id/toolbar" />
+
+        <ru.karapetiandav.hearthstonecards.base.layout.ErrorLayout
+            android:id="@+id/error_layout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/cards_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/toolbar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include layout="@layout/cards_bottom_sheet" />
