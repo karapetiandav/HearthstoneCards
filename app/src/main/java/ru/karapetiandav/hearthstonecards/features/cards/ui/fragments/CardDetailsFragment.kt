@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -15,6 +14,7 @@ import kotlinx.android.synthetic.main.card_details_content.*
 import kotlinx.android.synthetic.main.fragment_card_details.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.karapetiandav.hearthstonecards.R
+import ru.karapetiandav.hearthstonecards.base.layout.ErrorLayoutData
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.*
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsDetailViewModel
 import ru.karapetiandav.hearthstonecards.lifecycle.observe
@@ -32,7 +32,7 @@ class CardDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        screenState = LoadingStateDelegate(loadingView = loading)
+        screenState = LoadingStateDelegate(loadingView = loading, stubView = error_layout_details)
 
         observe(cardsViewModel.state, ::onStateChanged)
         val activity = activity as? AppCompatActivity ?: return
@@ -50,7 +50,7 @@ class CardDetailsFragment : Fragment() {
     }
 
     private fun onStateChanged(state: CardDetailsScreenState) {
-        when (state) {
+         when (state) {
             is CardDetailsData -> {
                 toolbar.title = state.card.name
             }
@@ -101,7 +101,13 @@ class CardDetailsFragment : Fragment() {
                 screenState.showLoading()
             }
             is CardDetailsError -> {
-                Toast.makeText(context, state.error.localizedMessage, Toast.LENGTH_SHORT).show()
+                screenState.showStub(
+                    ErrorLayoutData(
+                        R.drawable.ic_error_24dp,
+                        getString(R.string.error_title),
+                        getString(R.string.error_description)
+                    )
+                )
             }
         }
     }

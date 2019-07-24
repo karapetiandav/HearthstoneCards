@@ -68,6 +68,7 @@
         tools:text="Name" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -145,5 +146,14 @@
             android:visibility="gone"
             tools:visibility="visible" />
     </LinearLayout>
+
+    <ru.karapetiandav.hearthstonecards.base.layout.ErrorLayout
+        android:id="@+id/error_layout_details"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
