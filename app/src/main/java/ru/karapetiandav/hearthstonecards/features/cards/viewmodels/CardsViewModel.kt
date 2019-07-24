@@ -65,23 +65,22 @@ class CardsViewModel(
                 if (selectedCosts.isEmpty()) selectedCosts.addAll(allCosts)
                 if (selectedPlayerClasses.isEmpty()) selectedPlayerClasses.addAll(allClasses)
 
-                applyFilters()
-
                 _filterData.value = FilterDTO(
                     allTypes.map { ChipsViewModel(it, true) },
                     allCosts.map { ChipsViewModel(it, true) },
                     allClasses.map { ChipsViewModel(it, true) }
                 )
             }
-            .map<CardsViewState> { cards -> CardsData(cards.values.flatten().sortedBy { it.name }) }
+            .map { applyFilters() }
+            .map<CardsViewState> { cards -> CardsData(cards) }
             .startWith(CardsLoading)
             .onErrorReturn(::CardsError)
             .subscribe(_state::onNext) { th -> Timber.tag(TAG()).e(th) }
             .disposeOnViewModelDestroy()
     }
 
-    private fun applyFilters() {
-        val newList = allCards.values
+    private fun applyFilters(): List<Card> {
+        return allCards.values
             .flatten()
             .filter {
                 selectedTypes.contains(it.type)
@@ -89,7 +88,6 @@ class CardsViewModel(
                         && selectedPlayerClasses.contains(it.playerClass)
             }
             .sortedBy { it.name }
-        _state.onNext(CardsData(newList))
     }
 
     var lastSearch: String? = null
