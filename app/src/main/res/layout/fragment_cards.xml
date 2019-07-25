@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".features.cards.ui.CardsFragment">
+        tools:context=".features.cards.ui.fragments.CardsFragment">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"

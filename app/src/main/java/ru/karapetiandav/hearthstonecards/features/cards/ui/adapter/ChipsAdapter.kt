@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.item_chips.view.*
 import ru.karapetiandav.hearthstonecards.R
 import ru.karapetiandav.hearthstonecards.features.cards.models.Filterable
 
-data class ChipsViewModel(val filterable: Filterable, val checked: Boolean)
+data class ChipsViewModel(val filterable: Filterable, val checked: Boolean = true)
 
 class ChipsAdapter(private val onItemCheckListener: OnItemCheckListener) :
     RecyclerView.Adapter<ChipsAdapter.ChipsViewHolder>() {

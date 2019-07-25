@@ -1,6 +1,5 @@
 package ru.karapetiandav.hearthstonecards.features.cards.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -10,6 +9,7 @@ import ru.karapetiandav.hearthstonecards.features.cards.ui.state.*
 import ru.karapetiandav.hearthstonecards.features.shared.CardsRepository
 import ru.karapetiandav.hearthstonecards.lifecycle.onNext
 import ru.terrakok.cicerone.Router
+import timber.log.Timber
 
 class CardsDetailViewModel(cardsRepository: CardsRepository, private val router: Router) : BaseViewModel() {
 
@@ -24,7 +24,7 @@ class CardsDetailViewModel(cardsRepository: CardsRepository, private val router:
             .observeOn(AndroidSchedulers.mainThread())
             .onErrorReturn(::CardDetailsError)
             .startWith(CardDetailsLoading)
-            .subscribe(_state::onNext) { th -> Log.e(this::class.java.simpleName, "ERROR", th) }
+            .subscribe(_state::onNext) { th -> Timber.tag(TAG()).e(th) }
             .disposeOnViewModelDestroy()
 
         cardsRepository.getSelectedCard()
@@ -34,7 +34,7 @@ class CardsDetailViewModel(cardsRepository: CardsRepository, private val router:
             .observeOn(AndroidSchedulers.mainThread())
             .onErrorReturn(::CardDetailsError)
             .startWith(CardDetailsLoading)
-            .subscribe(_state::onNext) { th -> Log.e(this::class.java.simpleName, "ERROR", th) }
+            .subscribe(_state::onNext) { th -> Timber.tag(TAG()).e(th) }
             .disposeOnViewModelDestroy()
     }
 

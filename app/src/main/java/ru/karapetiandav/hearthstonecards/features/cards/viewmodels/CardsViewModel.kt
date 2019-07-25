@@ -66,9 +66,9 @@ class CardsViewModel(
                 if (selectedPlayerClasses.isEmpty()) selectedPlayerClasses.addAll(allClasses)
 
                 _filterData.value = FilterDTO(
-                    allTypes.map { ChipsViewModel(it, true) },
-                    allCosts.map { ChipsViewModel(it, true) },
-                    allClasses.map { ChipsViewModel(it, true) }
+                    allTypes.map { ChipsViewModel(it) },
+                    allCosts.map { ChipsViewModel(it) },
+                    allClasses.map { ChipsViewModel(it) }
                 )
             }
             .map { applyFilters() }

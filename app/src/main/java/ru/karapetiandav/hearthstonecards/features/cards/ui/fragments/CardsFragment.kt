@@ -1,4 +1,4 @@
-package ru.karapetiandav.hearthstonecards.features.cards.ui
+package ru.karapetiandav.hearthstonecards.features.cards.ui.fragments
 
 
 import android.app.SearchManager
