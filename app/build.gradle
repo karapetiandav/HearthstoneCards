@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'com.google.gms.google-services'
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -66,4 +68,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-3'
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-auth:18.1.0'
 }

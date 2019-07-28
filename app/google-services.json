@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "476582266951",
+    "firebase_url": "https://heartstonecards-5c5fc.firebaseio.com",
+    "project_id": "heartstonecards-5c5fc",
+    "storage_bucket": "heartstonecards-5c5fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:476582266951:android:93a703155aa02c1a",
+        "android_client_info": {
+          "package_name": "ru.karapetiandav.hearthstonecards"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "476582266951-msd4lcqf9q74j2so08k9fhpaki5p9cfa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.karapetiandav.hearthstonecards",
+            "certificate_hash": "1d66ae37dfc963c13a88ecb6a520c9a8c497cebd"
+          }
+        },
+        {
+          "client_id": "476582266951-e5mgjmv897k3r4uh1hhj2tribbdejnf0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgElDuQwSxvl-uTuBxhhWBmF3HftCoZ1I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "476582266951-e5mgjmv897k3r4uh1hhj2tribbdejnf0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
