@@ -1,7 +1,9 @@
 package ru.karapetiandav.hearthstonecards.di.modules
 
+import com.google.firebase.auth.FirebaseAuth
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import ru.karapetiandav.hearthstonecards.features.auth.AuthViewModel
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsDetailViewModel
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsViewModel
 import ru.karapetiandav.hearthstonecards.features.shared.CardsRepository
@@ -33,5 +35,10 @@ object Modules {
         single<CardsRepository> { CardsRepositoryImpl(get()) }
         viewModel { CardsViewModel(get(), get(), get()) }
         viewModel { CardsDetailViewModel(get(), get()) }
+    }
+
+    val authModule = module {
+        single { FirebaseAuth.getInstance() }
+        viewModel { AuthViewModel(get(), get()) }
     }
 }

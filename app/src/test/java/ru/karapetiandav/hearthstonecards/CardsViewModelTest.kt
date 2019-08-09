@@ -13,6 +13,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentCaptor
 import org.mockito.Mockito
+import ru.karapetiandav.hearthstonecards.features.cards.models.Card
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsData
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsError
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsLoading

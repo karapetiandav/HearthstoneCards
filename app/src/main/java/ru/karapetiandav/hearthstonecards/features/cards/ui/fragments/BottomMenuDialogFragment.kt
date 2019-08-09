@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_bottom_menu.*
 import org.koin.android.ext.android.inject
+import ru.karapetiandav.hearthstonecards.AuthScreen
 import ru.karapetiandav.hearthstonecards.R
 import ru.terrakok.cicerone.Router
 
@@ -24,6 +25,7 @@ class BottomMenuDialogFragment : BottomSheetDialogFragment() {
         nav_view.setNavigationItemSelectedListener {
             when(it.itemId) {
                 R.id.account -> {
+                    router.navigateTo(AuthScreen)
                     true
                 }
                 else -> false

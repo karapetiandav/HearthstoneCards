@@ -29,4 +29,8 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="OutlinedEditText" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/secondaryLightColor</item>
+    </style>
+
 </resources>
