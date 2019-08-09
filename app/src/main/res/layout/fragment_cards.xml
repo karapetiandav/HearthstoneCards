@@ -51,16 +51,21 @@
             app:layout_constraintTop_toTopOf="@+id/toolbar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include layout="@layout/cards_bottom_sheet" />
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottom_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:backgroundTint="@color/secondaryLightColor"
+        app:fabAlignmentMode="end"
+        app:navigationIcon="@drawable/ic_menu_white_24dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/filter_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
         android:src="@drawable/ic_filter_list_white_24dp"
-        app:layout_anchor="@+id/bottom_sheet"
-        app:layout_anchorGravity="top|end" />
+        app:layout_anchor="@id/bottom_app_bar" />
+
+    <include layout="@layout/cards_bottom_sheet" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

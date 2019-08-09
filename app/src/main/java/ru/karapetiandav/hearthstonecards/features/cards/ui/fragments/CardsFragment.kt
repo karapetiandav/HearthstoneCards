@@ -53,7 +53,7 @@ class CardsFragment : BaseFragment(), BackPressHandler {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
+        (activity as? AppCompatActivity)?.setSupportActionBar(bottom_app_bar)
 
         if (savedInstanceState == null) {
             cardsViewModel.loadCards()
@@ -165,10 +165,10 @@ class CardsFragment : BaseFragment(), BackPressHandler {
 
     private lateinit var searchView: SearchView
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        activity?.menuInflater?.inflate(ru.karapetiandav.hearthstonecards.R.menu.cards_menu, menu)
+        activity?.menuInflater?.inflate(R.menu.bottom_menu, menu)
 
         val searchManager = context?.getSystemService(SEARCH_SERVICE) as SearchManager
-        val searchItem = menu?.findItem(ru.karapetiandav.hearthstonecards.R.id.cards_search)
+        val searchItem = menu?.findItem(R.id.cards_search)
         searchView = searchItem?.actionView as SearchView
         searchView.setSearchableInfo(searchManager.getSearchableInfo(activity?.componentName))
 
@@ -204,6 +204,17 @@ class CardsFragment : BaseFragment(), BackPressHandler {
             true
         } else {
             false
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when(item?.itemId) {
+            android.R.id.home -> {
+                val bottomNavDrawerFragment = BottomMenuDialogFragment()
+                bottomNavDrawerFragment.show(childFragmentManager, bottomNavDrawerFragment.tag)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }

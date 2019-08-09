@@ -8,4 +8,10 @@
         android:title="@string/cards_menu_search_text"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
+
+    <item
+        android:id="@+id/favorite"
+        android:icon="@drawable/ic_favorite_white_24dp"
+        android:title="Favorite"
+        app:showAsAction="ifRoom" />
 </menu>
