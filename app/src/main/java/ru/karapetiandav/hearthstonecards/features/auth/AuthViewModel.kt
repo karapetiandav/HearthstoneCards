@@ -1,5 +1,6 @@
 package ru.karapetiandav.hearthstonecards.features.auth
 
+import androidx.core.util.PatternsCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.androidhuman.rxfirebase2.auth.rxCreateUserWithEmailAndPassword
@@ -22,17 +23,15 @@ class AuthViewModel(private val authClient: FirebaseAuth, private val schedulers
 
     fun checkIsUserLogged() {
         authClient.rxGetCurrentUser()
+            .map<AuthViewState> { AuthLogged(it.toUser()) }
             .subscribeOn(schedulers.io())
             .observeOn(schedulers.mainThread())
-            .map<AuthViewState> { AuthLogged(it.toUser()) }
-            .subscribe(_state::onNext, { th -> Timber.tag(TAG()).e(th) }, { _state.onNext(AuthNotLogged) })
+            .subscribe(_state::onNext, { th -> Timber.e(th) }, { _state.onNext(AuthNotLogged) })
             .disposeOnViewModelDestroy()
     }
 
-    fun onSignInClick(email: String, password: String) {
-        authClient.rxSignInWithEmailAndPassword(email, password)
-            .subscribeOn(schedulers.io())
-            .observeOn(schedulers.mainThread())
+    fun onSignInClick(credentials: Credentials) {
+        authClient.rxSignInWithEmailAndPassword(credentials.email, credentials.password)
             .map {
                 return@map if (it.user != null) {
                     AuthLogged(it.user.toUser())
@@ -41,6 +40,8 @@ class AuthViewModel(private val authClient: FirebaseAuth, private val schedulers
                 }
             }
             .onErrorReturn(::AuthError)
+            .subscribeOn(schedulers.io())
+            .observeOn(schedulers.mainThread())
             .subscribe(_state::onNext) { Timber.tag(TAG()).e(it) }
             .disposeOnViewModelDestroy()
     }
@@ -49,16 +50,34 @@ class AuthViewModel(private val authClient: FirebaseAuth, private val schedulers
         authClient.rxSignOut()
             .subscribeOn(schedulers.io())
             .observeOn(schedulers.mainThread())
-            .subscribe({ _state.onNext(AuthNotLogged) }, { Timber.tag(TAG()).e(it) })
+            .subscribe({ _state.onNext(AuthNotLogged) }, { Timber.e(it) })
             .disposeOnViewModelDestroy()
     }
 
-    fun onSignUpClick(email: String, password: String) {
-        authClient.rxCreateUserWithEmailAndPassword(email, password)
+    fun onSignUpClick(credentials: Credentials) {
+        authClient.rxCreateUserWithEmailAndPassword(credentials.email, credentials.password)
+            .map<AuthViewState> { AuthLogged(it.toUser()) }
+            .onErrorReturn(::AuthError)
             .subscribeOn(schedulers.io())
             .observeOn(schedulers.mainThread())
-            .subscribe({ _state.onNext(AuthNotLogged) }, { Timber.tag(TAG()).e(it) })
+            .subscribe(_state::onNext) { Timber.e(it) }
             .disposeOnViewModelDestroy()
+    }
+
+    fun validateEmail(email: String): String? {
+        return if (PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()) {
+            null
+        } else {
+            "Enter correct e-mail"
+        }
+    }
+
+    fun validatePassword(pass: String): String? {
+        return if (pass.length > 6) {
+            null
+        } else {
+            "Password must be at least 6 symbols"
+        }
     }
 
 }
