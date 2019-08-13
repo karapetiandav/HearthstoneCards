@@ -39,6 +39,6 @@ object Modules {
 
     val authModule = module {
         single { FirebaseAuth.getInstance() }
-        viewModel { AuthViewModel(get(), get()) }
+        viewModel { AuthViewModel(get(), get(), get()) }
     }
 }

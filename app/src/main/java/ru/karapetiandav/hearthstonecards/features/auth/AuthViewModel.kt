@@ -8,14 +8,19 @@ import com.androidhuman.rxfirebase2.auth.rxGetCurrentUser
 import com.androidhuman.rxfirebase2.auth.rxSignInWithEmailAndPassword
 import com.androidhuman.rxfirebase2.auth.rxSignOut
 import com.google.firebase.auth.FirebaseAuth
+import ru.karapetiandav.hearthstonecards.CardsScreen
 import ru.karapetiandav.hearthstonecards.base.viewmodel.BaseViewModel
 import ru.karapetiandav.hearthstonecards.extensions.toUser
 import ru.karapetiandav.hearthstonecards.lifecycle.onNext
 import ru.karapetiandav.hearthstonecards.providers.rx.SchedulersProvider
+import ru.terrakok.cicerone.Router
 import timber.log.Timber
 
-class AuthViewModel(private val authClient: FirebaseAuth, private val schedulers: SchedulersProvider) :
-    BaseViewModel() {
+class AuthViewModel(
+    private val authClient: FirebaseAuth,
+    private val schedulers: SchedulersProvider,
+    private val router: Router
+) : BaseViewModel() {
 
     private val _state = MutableLiveData<AuthViewState>()
     val state: LiveData<AuthViewState>
@@ -80,4 +85,7 @@ class AuthViewModel(private val authClient: FirebaseAuth, private val schedulers
         }
     }
 
+    fun onBackPressed() {
+        router.backTo(CardsScreen)
+    }
 }

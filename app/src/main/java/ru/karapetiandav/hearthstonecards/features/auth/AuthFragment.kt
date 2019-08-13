@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.redmadrobot.lib.sd.base.State
@@ -17,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_auth.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.karapetiandav.hearthstonecards.R
 import ru.karapetiandav.hearthstonecards.base.fragment.BaseFragment
+import ru.karapetiandav.hearthstonecards.extensions.setupBackButton
 import ru.karapetiandav.hearthstonecards.features.auth.validation.AuthErrorHandler
 import ru.karapetiandav.hearthstonecards.lifecycle.observe
 import timber.log.Timber
@@ -34,6 +36,7 @@ class AuthFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as? AppCompatActivity)?.setupBackButton(toolbar, viewModel::onBackPressed)
 
         screenState = StateDelegate(
             State(

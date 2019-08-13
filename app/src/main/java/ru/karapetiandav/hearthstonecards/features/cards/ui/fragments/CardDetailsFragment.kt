@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_card_details.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.karapetiandav.hearthstonecards.R
 import ru.karapetiandav.hearthstonecards.base.layout.ErrorLayoutData
+import ru.karapetiandav.hearthstonecards.extensions.setupBackButton
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.*
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsDetailViewModel
 import ru.karapetiandav.hearthstonecards.lifecycle.observe
@@ -31,16 +32,12 @@ class CardDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as? AppCompatActivity)?.setupBackButton(toolbar, cardsViewModel::onBackPressed)
 
         screenState = LoadingStateDelegate(loadingView = loading, stubView = error_layout_details)
 
         observe(cardsViewModel.state, ::onStateChanged)
-        val activity = activity as? AppCompatActivity ?: return
-        with(activity) {
-            setSupportActionBar(toolbar)
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            toolbar.setNavigationOnClickListener { cardsViewModel.onBackPressed() }
-        }
+
         Glide.with(this)
             .load(R.drawable.cardback)
             .into(card_img)
