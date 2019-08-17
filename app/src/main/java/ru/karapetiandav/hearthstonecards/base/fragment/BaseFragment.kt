@@ -18,6 +18,4 @@ abstract class BaseFragment: Fragment() {
         compositeDisposable.add(this)
         return this
     }
-
-    fun Fragment.TAG(): String = this::class.java.simpleName
 }

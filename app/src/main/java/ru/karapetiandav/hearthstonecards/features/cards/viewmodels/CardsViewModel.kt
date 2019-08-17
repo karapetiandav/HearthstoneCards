@@ -75,7 +75,7 @@ class CardsViewModel(
             .map<CardsViewState> { cards -> CardsData(cards) }
             .startWith(CardsLoading)
             .onErrorReturn(::CardsError)
-            .subscribe(_state::onNext) { th -> Timber.tag(TAG()).e(th) }
+            .subscribe(_state::onNext) { th -> Timber.e(th) }
             .disposeOnViewModelDestroy()
     }
 
@@ -133,16 +133,7 @@ class CardsViewModel(
             is PlayerClass -> selectedPlayerClasses.remove(filterable)
         }
 
-        val newList = allCards.values
-            .flatten()
-            .filter {
-                selectedTypes.contains(it.type)
-                        && selectedCosts.contains(it.cost)
-                        && selectedPlayerClasses.contains(it.playerClass)
-            }
-            .sortedBy { it.name }
-        Timber.tag(TAG()).d(newList.distinctBy { it.type }.map { it.type }.joinToString())
-        _state.onNext(CardsData(newList))
+        _state.onNext(CardsData(applyFilters()))
     }
 
     fun onItemCheck(filterable: Filterable) {
@@ -152,15 +143,6 @@ class CardsViewModel(
             is PlayerClass -> selectedPlayerClasses.add(filterable)
         }
 
-        val newList = allCards.values
-            .flatten()
-            .filter {
-                selectedTypes.contains(it.type)
-                        && selectedCosts.contains(it.cost)
-                        && selectedPlayerClasses.contains(it.playerClass)
-            }
-            .sortedBy { it.name }
-        Timber.tag(TAG()).d(newList.distinctBy { it.type }.map { it.type }.joinToString())
-        _state.onNext(CardsData(newList))
+        _state.onNext(CardsData(applyFilters()))
     }
 }

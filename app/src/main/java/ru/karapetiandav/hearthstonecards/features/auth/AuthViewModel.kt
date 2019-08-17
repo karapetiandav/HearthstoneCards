@@ -47,7 +47,7 @@ class AuthViewModel(
             .onErrorReturn(::AuthError)
             .subscribeOn(schedulers.io())
             .observeOn(schedulers.mainThread())
-            .subscribe(_state::onNext) { Timber.tag(TAG()).e(it) }
+            .subscribe(_state::onNext) { Timber.e(it) }
             .disposeOnViewModelDestroy()
     }
 

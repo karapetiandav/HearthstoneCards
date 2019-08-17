@@ -24,7 +24,7 @@ class CardsDetailViewModel(cardsRepository: CardsRepository, private val router:
             .observeOn(AndroidSchedulers.mainThread())
             .onErrorReturn(::CardDetailsError)
             .startWith(CardDetailsLoading)
-            .subscribe(_state::onNext) { th -> Timber.tag(TAG()).e(th) }
+            .subscribe(_state::onNext) { th -> Timber.e(th) }
             .disposeOnViewModelDestroy()
 
         cardsRepository.getSelectedCard()
@@ -34,7 +34,7 @@ class CardsDetailViewModel(cardsRepository: CardsRepository, private val router:
             .observeOn(AndroidSchedulers.mainThread())
             .onErrorReturn(::CardDetailsError)
             .startWith(CardDetailsLoading)
-            .subscribe(_state::onNext) { th -> Timber.tag(TAG()).e(th) }
+            .subscribe(_state::onNext) { th -> Timber.e(th) }
             .disposeOnViewModelDestroy()
     }
 
