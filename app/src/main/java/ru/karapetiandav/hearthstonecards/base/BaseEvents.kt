@@ -1,6 +1,5 @@
 package ru.karapetiandav.hearthstonecards.base
 
-import ru.karapetiandav.tinkoffintership.lifecycle.Event
+import ru.karapetiandav.hearthstonecards.lifecycle.Event
 
-class ShowFilterSheet(val types: List<String>) : Event
-class ShowToast(val text: String ): Event
+class ShowToast(val text: String) : Event

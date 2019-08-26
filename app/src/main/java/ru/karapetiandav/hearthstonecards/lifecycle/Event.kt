@@ -1,3 +1,3 @@
-package ru.karapetiandav.tinkoffintership.lifecycle
+package ru.karapetiandav.hearthstonecards.lifecycle
 
 interface Event

@@ -4,7 +4,7 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 
-class Card(
+data class Card(
     val cardId: String?,
     val name: String?,
     val cardSet: String?,
@@ -23,7 +23,8 @@ class Card(
     val playerClass: PlayerClass?,
     val img: String?,
     val imgGold: String?,
-    val locale: String?
+    val locale: String?,
+    val isFavorite: Boolean = false
 )
 
 class CardDeserializer : JsonDeserializer<Card> {

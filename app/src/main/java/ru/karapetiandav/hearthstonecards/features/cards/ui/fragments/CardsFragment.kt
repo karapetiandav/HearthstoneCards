@@ -33,7 +33,7 @@ import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsViewState
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsViewModel
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.FilterDTO
 import ru.karapetiandav.hearthstonecards.lifecycle.observe
-import ru.karapetiandav.tinkoffintership.lifecycle.Event
+import ru.karapetiandav.hearthstonecards.lifecycle.Event
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 

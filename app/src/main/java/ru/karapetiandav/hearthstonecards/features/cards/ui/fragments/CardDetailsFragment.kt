@@ -7,26 +7,31 @@ import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.redmadrobot.lib.sd.LoadingStateDelegate
 import kotlinx.android.synthetic.main.card_details_content.*
 import kotlinx.android.synthetic.main.fragment_card_details.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.karapetiandav.hearthstonecards.R
+import ru.karapetiandav.hearthstonecards.base.fragment.BaseFragment
 import ru.karapetiandav.hearthstonecards.base.layout.ErrorLayoutData
+import ru.karapetiandav.hearthstonecards.extensions.setVisible
 import ru.karapetiandav.hearthstonecards.extensions.setupBackButton
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.*
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsDetailViewModel
 import ru.karapetiandav.hearthstonecards.lifecycle.observe
 
-class CardDetailsFragment : Fragment() {
+class CardDetailsFragment : BaseFragment() {
 
     private lateinit var screenState: LoadingStateDelegate
 
     private val cardsViewModel: CardsDetailViewModel by viewModel()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.fragment_card_details, container, false)
     }
 
@@ -47,7 +52,7 @@ class CardDetailsFragment : Fragment() {
     }
 
     private fun onStateChanged(state: CardDetailsScreenState) {
-         when (state) {
+        when (state) {
             is CardDetailsData -> {
                 toolbar.title = state.card.name
             }
@@ -90,8 +95,12 @@ class CardDetailsFragment : Fragment() {
 
                     playerClass?.let {
                         card_player_class.visibility = VISIBLE
-                        card_player_class.text = getString(R.string.card_detail_player_class, playerClass.value)
+                        card_player_class.text =
+                            getString(R.string.card_detail_player_class, playerClass.value)
                     }
+
+                    favorite_btn.setOnClickListener { cardsViewModel.onFavoriteClick() }
+                    favorite_btn.setVisible(!isFavorite)
                 }
             }
             is CardDetailsLoading -> {

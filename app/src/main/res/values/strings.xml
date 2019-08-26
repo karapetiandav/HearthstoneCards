@@ -14,7 +14,7 @@
 
     <string name="error_title">Oops, something went wrong</string>
     <string name="error_description">Try again</string>
-    
+
     <string name="auth_toolbar_title">My account</string>
     <string name="auth_email_hint">E-mail</string>
     <string name="auth_password_hint">Password</string>

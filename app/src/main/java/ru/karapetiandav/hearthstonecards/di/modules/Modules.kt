@@ -1,8 +1,10 @@
 package ru.karapetiandav.hearthstonecards.di.modules
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import ru.karapetiandav.hearthstonecards.extensions.toUser
 import ru.karapetiandav.hearthstonecards.features.auth.AuthViewModel
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsDetailViewModel
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsViewModel
@@ -13,6 +15,8 @@ import ru.karapetiandav.hearthstonecards.providers.rx.SchedulersProvider
 import ru.karapetiandav.hearthstonecards.providers.rx.SchedulersProviderImpl
 import ru.karapetiandav.hearthstonecards.services.ApiService
 import ru.karapetiandav.hearthstonecards.services.ConnectivityService
+import ru.karapetiandav.hearthstonecards.storage.db.UserFavoriteDatabase
+import ru.karapetiandav.hearthstonecards.storage.db.UserFavoriteReferenceProvider
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
@@ -33,8 +37,15 @@ object Modules {
 
     val cardsModule = module {
         single<CardsRepository> { CardsRepositoryImpl(get()) }
+        single {
+            val db = FirebaseDatabase.getInstance()
+            db.setPersistenceEnabled(true)
+            db
+        }
+        single { UserFavoriteReferenceProvider(get<FirebaseAuth>().currentUser?.toUser()!!, get()) }
+        single { UserFavoriteDatabase(get()) }
         viewModel { CardsViewModel(get(), get(), get()) }
-        viewModel { CardsDetailViewModel(get(), get()) }
+        viewModel { CardsDetailViewModel(get(), get(), get(), get(), get()) }
     }
 
     val authModule = module {

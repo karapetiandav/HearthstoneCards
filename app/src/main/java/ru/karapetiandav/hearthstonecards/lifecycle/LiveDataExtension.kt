@@ -3,7 +3,6 @@ package ru.karapetiandav.hearthstonecards.lifecycle
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
-import ru.karapetiandav.tinkoffintership.lifecycle.Event
 import ru.karapetiandav.tinkoffintership.lifecycle.EventsQueue
 import java.util.*
 

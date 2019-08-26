@@ -1,3 +1,6 @@
 package ru.karapetiandav.hearthstonecards.features.auth
 
-data class User(val email: String, val isEmailVerified: Boolean)
+data class User(
+    val email: String,
+    val isEmailVerified: Boolean,
+    val uid: String)
