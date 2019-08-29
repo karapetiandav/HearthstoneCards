@@ -22,6 +22,7 @@ import ru.karapetiandav.hearthstonecards.base.fragment.BaseFragment
 import ru.karapetiandav.hearthstonecards.base.layout.ErrorLayoutData
 import ru.karapetiandav.hearthstonecards.features.cards.models.Card
 import ru.karapetiandav.hearthstonecards.features.cards.models.Filterable
+import ru.karapetiandav.hearthstonecards.features.cards.ui.FavoriteMenuItem
 import ru.karapetiandav.hearthstonecards.features.cards.ui.adapter.CardsAdapter
 import ru.karapetiandav.hearthstonecards.features.cards.ui.adapter.ChipsAdapter
 import ru.karapetiandav.hearthstonecards.features.cards.ui.adapter.OnItemCheckListener
@@ -188,6 +189,9 @@ class CardsFragment : BaseFragment(), BackPressHandler {
             searchItem.expandActionView()
             searchView.setQuery(it, true)
         }
+
+        val favorite = menu.findItem(R.id.favorite)
+        favorite.isVisible = cardsViewModel.isFavoriteVisible
     }
 
     override fun onPause() {

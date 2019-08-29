@@ -6,6 +6,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.card_details_content.view.*
 import ru.karapetiandav.hearthstonecards.features.auth.User
@@ -33,3 +34,5 @@ fun View.setVisible(isVisible : Boolean) {
         GONE
     }
 }
+
+fun FirebaseAuth.isUserLogged(): Boolean = currentUser != null

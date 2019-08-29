@@ -42,9 +42,9 @@ object Modules {
             db.setPersistenceEnabled(true)
             db
         }
-        single { UserFavoriteReferenceProvider(get<FirebaseAuth>().currentUser?.toUser()!!, get()) }
+        single { UserFavoriteReferenceProvider(get<FirebaseAuth>().currentUser?.toUser(), get()) }
         single { UserFavoriteDatabase(get()) }
-        viewModel { CardsViewModel(get(), get(), get()) }
+        viewModel { CardsViewModel(get(), get(), get(), get()) }
         viewModel { CardsDetailViewModel(get(), get(), get(), get(), get()) }
     }
 

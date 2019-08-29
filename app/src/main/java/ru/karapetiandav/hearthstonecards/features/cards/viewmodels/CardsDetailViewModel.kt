@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import ru.karapetiandav.hearthstonecards.CardsScreen
@@ -68,10 +69,13 @@ class CardsDetailViewModel(
 
     fun onFavoriteClick() {
         cardsRepository.getSelectedCard()
-            .flatMapCompletable { userFavoriteDatabase.saveFavoriteCardId(it.cardId!!) }
-            .toObservable<Card>() // TODO: Что из этого вообще получится?? Completable -> Observable
+            .flatMap {
+                userFavoriteDatabase.saveFavoriteCardId(it.cardId!!).andThen(Single.just(it))
+            }
+            .map<CardDetailsScreenState> { CardDetailsFullData(it.copy(isFavorite = true)) }
+            .subscribeOn(schedulers.io())
             .observeOn(schedulers.mainThread())
-            .subscribe({ Timber.d(it.toString()) }, { Timber.e(it) })
+            .subscribe(_state::onNext) { Timber.e(it) }
             .disposeOnViewModelDestroy()
     }
 

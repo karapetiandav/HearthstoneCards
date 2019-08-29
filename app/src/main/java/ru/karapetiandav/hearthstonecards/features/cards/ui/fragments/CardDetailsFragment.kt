@@ -8,11 +8,15 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.jakewharton.rxbinding3.view.clicks
 import com.redmadrobot.lib.sd.LoadingStateDelegate
 import kotlinx.android.synthetic.main.card_details_content.*
 import kotlinx.android.synthetic.main.fragment_card_details.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.karapetiandav.hearthstonecards.R
+import ru.karapetiandav.hearthstonecards.base.BackPressHandler
 import ru.karapetiandav.hearthstonecards.base.fragment.BaseFragment
 import ru.karapetiandav.hearthstonecards.base.layout.ErrorLayoutData
 import ru.karapetiandav.hearthstonecards.extensions.setVisible
@@ -20,12 +24,15 @@ import ru.karapetiandav.hearthstonecards.extensions.setupBackButton
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.*
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsDetailViewModel
 import ru.karapetiandav.hearthstonecards.lifecycle.observe
+import java.util.concurrent.TimeUnit
 
-class CardDetailsFragment : BaseFragment() {
+class CardDetailsFragment : BaseFragment(), BackPressHandler {
 
     private lateinit var screenState: LoadingStateDelegate
 
     private val cardsViewModel: CardsDetailViewModel by viewModel()
+
+    private val authClient: FirebaseAuth by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -99,8 +106,10 @@ class CardDetailsFragment : BaseFragment() {
                             getString(R.string.card_detail_player_class, playerClass.value)
                     }
 
-                    favorite_btn.setOnClickListener { cardsViewModel.onFavoriteClick() }
-                    favorite_btn.setVisible(!isFavorite)
+                    favorite_btn.setVisible(!isFavorite && authClient.currentUser != null)
+                    favorite_btn.clicks()
+                        .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                        .subscribe { cardsViewModel::onFavoriteClick }
                 }
             }
             is CardDetailsLoading -> {
@@ -117,5 +126,7 @@ class CardDetailsFragment : BaseFragment() {
             }
         }
     }
+
+    override fun onBackPressed(): Boolean = false
 
 }

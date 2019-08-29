@@ -2,10 +2,13 @@ package ru.karapetiandav.hearthstonecards.features.cards.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Observable
 import ru.karapetiandav.hearthstonecards.CardDetailsScreen
 import ru.karapetiandav.hearthstonecards.base.viewmodel.BaseViewModel
+import ru.karapetiandav.hearthstonecards.extensions.isUserLogged
 import ru.karapetiandav.hearthstonecards.features.cards.models.*
+import ru.karapetiandav.hearthstonecards.features.cards.ui.FavoriteMenuItem
 import ru.karapetiandav.hearthstonecards.features.cards.ui.adapter.ChipsViewModel
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsData
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsError
@@ -27,7 +30,8 @@ data class FilterDTO(
 class CardsViewModel(
     private val cardsRepository: CardsRepository,
     private val router: Router,
-    private val schedulers: SchedulersProvider
+    private val schedulers: SchedulersProvider,
+    private val firebaseAuth: FirebaseAuth
 ) : BaseViewModel() {
 
     private val _state = MutableLiveData<CardsViewState>()
@@ -50,6 +54,9 @@ class CardsViewModel(
             field = value
         }
 
+    val isFavoriteVisible: Boolean
+    get() = firebaseAuth.isUserLogged()
+
     fun loadCards() {
         cardsRepository.getCards()
             .toObservable()
@@ -59,7 +66,8 @@ class CardsViewModel(
                 allCards = cards
                 val allTypes = (cards.values.flatten().mapNotNull { it.type }.distinctBy { it })
                 val allCosts = (cards.values.flatten().mapNotNull { it.cost }.distinctBy { it })
-                val allClasses = (cards.values.flatten().mapNotNull { it.playerClass }.distinctBy { it })
+                val allClasses =
+                    (cards.values.flatten().mapNotNull { it.playerClass }.distinctBy { it })
 
                 if (selectedTypes.isEmpty()) selectedTypes.addAll(allTypes)
                 if (selectedCosts.isEmpty()) selectedCosts.addAll(allCosts)
@@ -100,7 +108,9 @@ class CardsViewModel(
             .map { allCards ->
                 val findedCards = mutableMapOf<String, List<Card>>()
                 allCards.forEach { (key, value) ->
-                    findedCards[key] = value.filter { it.name?.toLowerCase()?.contains(text.toLowerCase()) ?: false }
+                    findedCards[key] = value.filter {
+                        it.name?.toLowerCase()?.contains(text.toLowerCase()) ?: false
+                    }
                 }
                 findedCards
             }

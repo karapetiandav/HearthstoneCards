@@ -10,16 +10,16 @@ class UserFavoriteDatabase(
 ) : RemoteDatabase {
     override fun getFavoriteCardIds(): Single<List<String>> {
         return usersFavoriteReferenceProvider.getReference()
-            .data()
-            .flatMap { snapshot ->
+            ?.data()
+            ?.flatMap { snapshot ->
                 Single.just(snapshot.children.toList().map { it.key ?: "" })
-            }
+            } ?: Single.just(listOf())
     }
 
     override fun saveFavoriteCardId(id: String): Completable {
         return usersFavoriteReferenceProvider.getReference()
-            .child(id)
-            .rxSetValue(true)
+            ?.child(id)
+            ?.rxSetValue(true) ?: Completable.complete()
     }
 }
 
