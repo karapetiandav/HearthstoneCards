@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.jakewharton.rxbinding3.appcompat.queryTextChangeEvents
+import com.jakewharton.rxbinding3.view.clicks
 import com.redmadrobot.lib.sd.LoadingStateDelegate
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.cards_bottom_sheet.*
@@ -22,7 +23,6 @@ import ru.karapetiandav.hearthstonecards.base.fragment.BaseFragment
 import ru.karapetiandav.hearthstonecards.base.layout.ErrorLayoutData
 import ru.karapetiandav.hearthstonecards.features.cards.models.Card
 import ru.karapetiandav.hearthstonecards.features.cards.models.Filterable
-import ru.karapetiandav.hearthstonecards.features.cards.ui.FavoriteMenuItem
 import ru.karapetiandav.hearthstonecards.features.cards.ui.adapter.CardsAdapter
 import ru.karapetiandav.hearthstonecards.features.cards.ui.adapter.ChipsAdapter
 import ru.karapetiandav.hearthstonecards.features.cards.ui.adapter.OnItemCheckListener
@@ -33,8 +33,8 @@ import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsLoading
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.CardsViewState
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsViewModel
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.FilterDTO
-import ru.karapetiandav.hearthstonecards.lifecycle.observe
 import ru.karapetiandav.hearthstonecards.lifecycle.Event
+import ru.karapetiandav.hearthstonecards.lifecycle.observe
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -47,7 +47,11 @@ class CardsFragment : BaseFragment(), BackPressHandler {
 
     private var isOpen = false
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_cards, container, false)
     }
@@ -120,7 +124,8 @@ class CardsFragment : BaseFragment(), BackPressHandler {
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                filter_fab.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
+                filter_fab.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0)
+                    .start();
             }
         })
     }
@@ -143,7 +148,8 @@ class CardsFragment : BaseFragment(), BackPressHandler {
                         R.drawable.ic_error_24dp,
                         getString(R.string.error_title),
                         getString(R.string.error_description)
-                ))
+                    )
+                )
                 Timber.tag("CardsFragment").e(viewState.error)
             }
         }
@@ -192,6 +198,10 @@ class CardsFragment : BaseFragment(), BackPressHandler {
 
         val favorite = menu.findItem(R.id.favorite)
         favorite.isVisible = cardsViewModel.isFavoriteVisible
+        favorite.clicks()
+            .throttleFirst(1000, TimeUnit.MILLISECONDS)
+            .subscribe { cardsViewModel.onFavoriteClick() }
+            .disposeOnViewDestroy()
     }
 
     override fun onPause() {
@@ -212,7 +222,7 @@ class CardsFragment : BaseFragment(), BackPressHandler {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when(item?.itemId) {
+        return when (item?.itemId) {
             android.R.id.home -> {
                 val bottomNavDrawerFragment = BottomMenuDialogFragment()
                 bottomNavDrawerFragment.show(childFragmentManager, bottomNavDrawerFragment.tag)

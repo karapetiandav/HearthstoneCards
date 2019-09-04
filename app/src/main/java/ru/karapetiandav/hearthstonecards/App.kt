@@ -4,7 +4,6 @@ import android.app.Application
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import org.koin.core.module.Module
 import ru.karapetiandav.hearthstonecards.di.modules.Modules
 import timber.log.Timber
 
@@ -19,7 +18,15 @@ class App : Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(listOf(Modules.appModule, Modules.mainModule, Modules.cardsModule, Modules.authModule))
+            modules(
+                listOf(
+                    Modules.appModule,
+                    Modules.mainModule,
+                    Modules.cardsModule,
+                    Modules.authModule,
+                    Modules.favoritesModule
+                )
+            )
         }
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Observable
 import ru.karapetiandav.hearthstonecards.CardDetailsScreen
+import ru.karapetiandav.hearthstonecards.FavoritesScreen
 import ru.karapetiandav.hearthstonecards.base.viewmodel.BaseViewModel
 import ru.karapetiandav.hearthstonecards.extensions.isUserLogged
 import ru.karapetiandav.hearthstonecards.features.cards.models.*
@@ -154,5 +155,9 @@ class CardsViewModel(
         }
 
         _state.onNext(CardsData(applyFilters()))
+    }
+
+    fun onFavoriteClick() {
+        router.navigateTo(FavoritesScreen)
     }
 }

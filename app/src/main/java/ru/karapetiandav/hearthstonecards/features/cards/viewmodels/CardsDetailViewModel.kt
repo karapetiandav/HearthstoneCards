@@ -2,7 +2,6 @@ package ru.karapetiandav.hearthstonecards.features.cards.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,15 +13,14 @@ import ru.karapetiandav.hearthstonecards.features.cards.ui.state.*
 import ru.karapetiandav.hearthstonecards.features.shared.CardsRepository
 import ru.karapetiandav.hearthstonecards.lifecycle.onNext
 import ru.karapetiandav.hearthstonecards.providers.rx.SchedulersProvider
-import ru.karapetiandav.hearthstonecards.storage.db.UserFavoriteDatabase
+import ru.karapetiandav.hearthstonecards.storage.db.RemoteDatabase
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
 
 class CardsDetailViewModel(
     private val cardsRepository: CardsRepository,
     private val router: Router,
-    authClient: FirebaseAuth,
-    private val userFavoriteDatabase: UserFavoriteDatabase,
+    private val userFavoriteDatabase: RemoteDatabase,
     private val schedulers: SchedulersProvider
 ) : BaseViewModel() {
 
@@ -74,6 +72,7 @@ class CardsDetailViewModel(
             }
             .map<CardDetailsScreenState> { CardDetailsFullData(it.copy(isFavorite = true)) }
             .subscribeOn(schedulers.io())
+            .onErrorReturn(::CardDetailsError)
             .observeOn(schedulers.mainThread())
             .subscribe(_state::onNext) { Timber.e(it) }
             .disposeOnViewModelDestroy()

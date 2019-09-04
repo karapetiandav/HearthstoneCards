@@ -24,6 +24,7 @@ import ru.karapetiandav.hearthstonecards.extensions.setupBackButton
 import ru.karapetiandav.hearthstonecards.features.cards.ui.state.*
 import ru.karapetiandav.hearthstonecards.features.cards.viewmodels.CardsDetailViewModel
 import ru.karapetiandav.hearthstonecards.lifecycle.observe
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class CardDetailsFragment : BaseFragment(), BackPressHandler {
@@ -106,10 +107,10 @@ class CardDetailsFragment : BaseFragment(), BackPressHandler {
                             getString(R.string.card_detail_player_class, playerClass.value)
                     }
 
-                    favorite_btn.setVisible(!isFavorite && authClient.currentUser != null)
+                    favorite_btn.setVisible(!isFavorite && (authClient.currentUser != null))
                     favorite_btn.clicks()
                         .throttleFirst(1000, TimeUnit.MILLISECONDS)
-                        .subscribe { cardsViewModel::onFavoriteClick }
+                        .subscribe({ cardsViewModel.onFavoriteClick() }, { Timber.e(it) })
                 }
             }
             is CardDetailsLoading -> {

@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import ru.karapetiandav.hearthstonecards.features.auth.AuthFragment
 import ru.karapetiandav.hearthstonecards.features.cards.ui.fragments.CardsFragment
 import ru.karapetiandav.hearthstonecards.features.cards.ui.fragments.CardDetailsFragment
+import ru.karapetiandav.hearthstonecards.features.favorites.FavoritesFragment
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
 object CardsScreen: SupportAppScreen() {
@@ -21,5 +22,11 @@ object CardDetailsScreen: SupportAppScreen() {
 object AuthScreen: SupportAppScreen() {
     override fun getFragment(): Fragment {
         return AuthFragment()
+    }
+}
+
+object FavoritesScreen: SupportAppScreen() {
+    override fun getFragment(): Fragment {
+        return FavoritesFragment()
     }
 }
